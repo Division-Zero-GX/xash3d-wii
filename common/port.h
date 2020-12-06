@@ -51,6 +51,23 @@ GNU General Public License for more details.
 	#define _inline	static inline
 	#define FORCEINLINE inline __attribute__((always_inline))
 
+#if XASH_WII
+	#define PATH_SPLITTER "/"
+	#include <unistd.h>
+    #include <platform/wii/dll_wii.h> // include the references for RTLD_NOW
+//	#include <dlfcn.h> NOT AVAIABLE ON WII
+	#define O_BINARY 0 // O_BINARY is Windows extension
+	#define O_TEXT 0 // O_TEXT is Windows extension
+	// Windows functions to posix equivalent
+	#define _mkdir( x )					mkdir( x, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH )
+	#define LoadLibrary( x )			dlopen( x, RTLD_NOW )
+	#define GetProcAddress( x, y )		dlsym( x, y )
+	#define SetCurrentDirectory( x )	(!chdir( x ))
+	#define FreeLibrary( x )			dlclose( x )
+	#define tell( a )					lseek(a, 0, SEEK_CUR)
+	#define HAVE_DUP
+#endif
+
 #if XASH_POSIX
 	#define PATH_SPLITTER "/"
 	#include <unistd.h>

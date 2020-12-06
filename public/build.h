@@ -115,6 +115,10 @@ For more information, please refer to <http://unlicense.org/>
 #elif defined __WATCOMC__ && defined __DOS__
 	#define XASH_DOS4GW 1
 	#define XASH_LITTLE_ENDIAN
+// Half-life wii
+#elif defined(__wii__)
+    #define XASH_WII 1
+    #define XASH_BIG_ENDIAN 1
 #else
 #error "Place your operating system name here! If this is a mistake, try to fix conditions above and report a bug"
 #endif
@@ -203,6 +207,8 @@ For more information, please refer to <http://unlicense.org/>
 #elif defined __e2k__
 	#define XASH_64BIT 1
 	#define XASH_E2K 1
+#elif defined __ppc__
+    #define XASH_PPC 1
 #else
 	#error "Place your architecture name here! If this is a mistake, try to fix conditions above and report a bug"
 #endif

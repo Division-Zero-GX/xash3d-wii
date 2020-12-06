@@ -93,6 +93,8 @@ const char *Q_buildos( void )
 	osname = "emscripten";
 #elif XASH_DOS4GW
 	osname = "DOS4GW";
+#elif XASH_WII
+    osname = "wii";
 #else
 #error "Place your operating system name here! If this is a mistake, try to fix conditions above and report a bug"
 #endif
@@ -144,6 +146,8 @@ const char *Q_buildarch( void )
 	archname = "javascript";
 #elif XASH_E2K
 	archname = "e2k";
+#elif XASH_PPC
+    archname = "ppc";
 #else
 #error "Place your architecture name here! If this is a mistake, try to fix conditions above and report a bug"
 #endif

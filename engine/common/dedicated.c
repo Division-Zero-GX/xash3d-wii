@@ -17,6 +17,12 @@ GNU General Public License for more details.
 #include "xash3d_mathlib.h"
 #include "ref_api.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <gccore.h>
+static void *xfb = NULL;
+static GXRModeObj *rmode = NULL;
+
 ref_globals_t refState;
 
 const char *svc_strings[256] =
@@ -195,7 +201,7 @@ void Host_ClientBegin( void )
 
 void Host_ClientFrame( void )
 {
-
+	VIDEO_WaitVSync();
 }
 
 void Host_InputFrame( void )
@@ -210,7 +216,37 @@ void VID_InitDefaultResolution( void )
 
 void Con_Init( void )
 {
-	
+	VIDEO_Init();
+
+    xfb = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
+
+	console_init(xfb,20,20,rmode->fbWidth,rmode->xfbHeight,rmode->fbWidth*VI_DISPLAY_PIX_SZ);
+
+	// Set up the video registers with the chosen mode
+	VIDEO_Configure(rmode);
+
+	// Tell the video hardware where our display memory is
+	VIDEO_SetNextFramebuffer(xfb);
+
+	// Make the display visible
+	VIDEO_SetBlack(FALSE);
+
+	// Flush the video register changes to the hardware
+	VIDEO_Flush();
+    
+	VIDEO_WaitVSync();
+	if(rmode->viTVMode&VI_NON_INTERLACE) VIDEO_WaitVSync();
+
+
+	// The console understands VT terminal escape codes
+	// This positions the cursor on row 2, column 0
+	// we can use variables for this with format codes too
+	// e.g. printf ("\x1b[%d;%dH", row, column );
+	printf("\x1b[2;0H");
+
+
+	printf("Console Init");    
+    
 }
 
 void R_ClearAllDecals( void )

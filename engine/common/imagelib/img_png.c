@@ -21,6 +21,8 @@ GNU General Public License for more details.
 
 #if defined(XASH_NO_NETWORK)
 	#include "platform/stub/net_stub.h"
+#elif XASH_WII
+    #include <network.h>
 #elif !XASH_WIN32
 	#include <netinet/in.h>
 #endif

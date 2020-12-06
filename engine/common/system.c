@@ -32,6 +32,11 @@ GNU General Public License for more details.
 #endif
 #endif
 
+#if XASH_WII
+#include <unistd.h>
+#include <signal.h>
+#endif
+
 #include "menu_int.h" // _UPDATE_PAGE macro
 
 qboolean	error_on_exit = false;	// arg for exit();
@@ -284,7 +289,8 @@ qboolean Sys_LoadLibrary( dll_info_t *dll )
 			*func->func = NULL;
 	}
 
-	if( !dll->link ) dll->link = LoadLibrary ( dll->name ); // environment pathes
+    // half life wii change
+	if( !dll->link ) dll->link = (void *)LoadLibrary ( dll->name ); // environment pathes
 
 	// no DLL found
 	if( !dll->link ) 

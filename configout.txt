@@ -1,0 +1,102 @@
+Setting top to                                          : /home/saucesaft/xash3d-fwgs 
+Setting out to                                          : /home/saucesaft/xash3d-fwgs/build 
+Build type                                              : release 
+// called by conf.load()
+Checking for 'gcc' (C compiler)                         : /usr/sbin/gcc 
+Target OS                                               : linux 
+Target CPU                                              : x86_64 
+Target binfmt                                           : elf 
+Checking for 'g++' (C++ compiler)                       : /usr/sbin/g++ 
+Target OS                                               : linux 
+Target CPU                                              : x86_64 
+Target binfmt                                           : elf 
+Checking for program 'git'                              : /usr/sbin/git 
+Checking git hash                                       : 9acedb3-dirty 
+Checking for program 'strip'                            : /usr/sbin/strip 
+Checking for program 'objcopy'                          : /usr/sbin/objcopy 
+Checking if 'gcc' can target 32-bit                     : no 
+...trying with additional flags                         : yes 
+Checking for required C flags                           : yes 
+Checking for required C++ flags                         : yes 
+Checking supported flags for g++ in parallel            : started 
+... -Winit-self                                         : yes 
+... -Werror=implicit-fallthrough=2                      : yes 
+... -Werror=parentheses                                 : yes 
+... -Werror=tautological-compare                        : yes 
+... -Werror=bool-operation                              : yes 
+... -Wstrict-aliasing                                   : yes 
+... -Werror=cast-align=strict                           : yes 
+... -Werror=packed-not-aligned                          : yes 
+... -Werror=vla                                         : yes 
+... -Wcast-align                                        : yes 
+... -Werror=return-type                                 : yes 
+... -Werror=packed                                      : yes 
+... -Wuninitialized                                     : yes 
+... -Werror=duplicated-cond                             : yes 
+... -Werror=duplicated-branches                         : yes 
+... -Werror=bool-compare                                : yes 
+... -fdiagnostics-color=always                          : yes 
+-> processing test results                              : all ok 
+Checking supported flags for gcc in parallel            : started 
+... -Winit-self                                         : yes 
+... -Werror=packed                                      : yes 
+... -Werror=bool-compare                                : yes 
+... -Werror=parentheses                                 : yes 
+... -Werror=implicit-int                                : yes 
+... -Werror=tautological-compare                        : yes 
+... -Werror=packed-not-aligned                          : yes 
+... -Werror=declaration-after-statement                 : yes 
+... -Werror=implicit-fallthrough=2                      : yes 
+... -Werror=bool-operation                              : yes 
+... -Wuninitialized                                     : yes 
+... -Werror=cast-align=strict                           : yes 
+... -Wstrict-aliasing                                   : yes 
+... -Werror=old-style-declaration                       : yes 
+... -Werror=implicit-function-declaration               : yes 
+... -fnonconst-initializers                             : no 
+... -Werror=incompatible-pointer-types                  : yes 
+... -Werror=vla                                         : yes 
+... -Werror=int-conversion                              : yes 
+... -Wcast-align                                        : yes 
+... -Werror=strict-prototypes                           : yes 
+... -Werror=return-type                                 : yes 
+... -Werror=enum-conversion                             : yes 
+... -Werror=old-style-definition                        : yes 
+... -Werror=duplicated-cond                             : yes 
+... -Werror=duplicated-branches                         : yes 
+... -fdiagnostics-color=always                          : yes 
+-> processing test results                              : 1 test failed 
+Checking for header tgmath.h                            : yes 
+Checking if tgmath.h is usable                          : yes 
+Checking for header stdint.h                            : yes 
+Checking for library dl                                 : yes 
+Checking for library m                                  : yes 
+--> public                                              : in progress 
+<-- public                                              : done 
+--> game_launch                                         : in progress 
+<-- game_launch                                         : done 
+--> ref_gl                                              : in progress 
+<-- ref_gl                                              : done 
+--> ref_soft                                            : in progress 
+<-- ref_soft                                            : done 
+--> mainui                                              : in progress 
+Checking if 'g++' supports C++11                        : yes 
+Checking for program 'pkg-config'                       : /usr/sbin/pkg-config 
+Checking for 'freetype2'                                : yes 
+Checking for 'freetype2' sanity                         : yes 
+Checking for 'fontconfig'                               : yes 
+Checking for 'fontconfig' sanity                        : yes 
+Checking for library rt                                 : yes 
+<-- mainui                                              : done 
+--> vgui_support                                        : in progress 
+Does this architecture support VGUI?                    : yes 
+Does this OS support VGUI?                              : yes 
+Does this toolchain able to link VGUI?                  : yes 
+Configuring VGUI by provided path                       : yes: [':vgui.so'], ['/home/saucesaft/xash3d-fwgs/vgui-dev/lib'], ['/home/saucesaft/xash3d-fwgs/vgui-dev/include'] 
+<-- vgui_support                                        : done 
+--> engine                                              : in progress 
+Checking for library SDL2                               : yes 
+Checking for library SDL2 sanity                        : yes 
+Checking the flags needed to use pthreads               : -pthread 
+<-- engine                                              : done 
+'configure' finished successfully (2.865s)

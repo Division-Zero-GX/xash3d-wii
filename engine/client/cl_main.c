@@ -3057,8 +3057,8 @@ void CL_Init( void )
 {
 	string libpath;
 
-	if( host.type == HOST_DEDICATED )
-		return; // nothing running on the client
+	//if( host.type == HOST_DEDICATED )
+	//	return; // nothing running on the client
 
 	CL_InitLocal();
 

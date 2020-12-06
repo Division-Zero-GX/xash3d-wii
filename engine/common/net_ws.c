@@ -22,6 +22,59 @@ GNU General Public License for more details.
 #include <WS2tcpip.h>
 typedef int WSAsize_t;
 
+#elif XASH_WII
+
+#include <network.h>
+#include <errno.h>
+
+typedef int WSAsize_t;
+
+#define gethostbyname( a ) net_gethostbyname( a )
+#define recvfrom( a, b, c, d, e, f ) net_recvfrom( a, b, c, d, e, f )
+
+#define SOCKET int
+#define IP_MULTICAST_LOOP 9
+#define closesocket close
+
+#define WSAGetLastError()  errno
+#define WSAEINTR           EINTR
+#define WSAEBADF           EBADF
+#define WSAEACCES          EACCES
+#define WSAEFAULT          EFAULT
+#define WSAEINVAL          EINVAL
+#define WSAEMFILE          EMFILE
+#define WSAEWOULDBLOCK     EWOULDBLOCK
+#define WSAEINPROGRESS     EINPROGRESS
+#define WSAEALREADY        EALREADY
+#define WSAENOTSOCK        ENOTSOCK
+#define WSAEDESTADDRREQ    EDESTADDRREQ
+#define WSAEMSGSIZE        EMSGSIZE
+#define WSAEPROTOTYPE      EPROTOTYPE
+#define WSAENOPROTOOPT     ENOPROTOOPT
+#define WSAEPROTONOSUPPORT EPROTONOSUPPORT
+#define WSAESOCKTNOSUPPORT ESOCKTNOSUPPORT
+#define WSAEOPNOTSUPP      EOPNOTSUPP
+#define WSAEPFNOSUPPORT    EPFNOSUPPORT
+#define WSAEAFNOSUPPORT    EAFNOSUPPORT
+#define WSAEADDRINUSE      EADDRINUSE
+#define WSAEADDRNOTAVAIL   EADDRNOTAVAIL
+#define WSAENETDOWN        ENETDOWN
+#define WSAENETUNREACH     ENETUNREACH
+#define WSAENETRESET       ENETRESET
+#define WSAECONNABORTED    ECONNABORTED
+#define WSAECONNRESET      ECONNRESET
+#define WSAENOBUFS         ENOBUFS
+#define WSAEISCONN         EISCONN
+#define WSAENOTCONN        ENOTCONN
+#define WSAESHUTDOWN       ESHUTDOWN
+#define WSAETOOMANYREFS    ETOOMANYREFS
+#define WSAETIMEDOUT       ETIMEDOUT
+#define WSAECONNREFUSED    ECONNREFUSED
+#define WSAELOOP           ELOOP
+#define WSAENAMETOOLONG    ENAMETOOLONG
+#define WSAEHOSTDOWN       EHOSTDOWN
+
+
 #elif !defined XASH_NO_NETWORK
 // BSD sockets
 #include <sys/types.h>
@@ -340,7 +393,7 @@ int NET_GetHostByName( const char *hostname )
 #endif
 }
 
-#if !defined XASH_NO_ASYNC_NS_RESOLVE && ( XASH_WIN32 || !(XASH_EMSCRIPTEN || XASH_DOS4GW) )
+#if !defined XASH_NO_ASYNC_NS_RESOLVE && ( XASH_WIN32 || !(XASH_EMSCRIPTEN || XASH_DOS4GW || XASH_WII) )
 #define CAN_ASYNC_NS_RESOLVE
 #endif
 

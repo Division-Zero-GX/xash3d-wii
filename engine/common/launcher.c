@@ -31,6 +31,7 @@ GNU General Public License for more details.
 #define XASH_NOCONHOST 1
 #endif
 
+
 static char szGameDir[128]; // safe place to keep gamedir
 static int g_iArgc;
 static char **g_pszArgv;

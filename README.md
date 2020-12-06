@@ -10,6 +10,9 @@ Xash3D FWGS is a fork of Xash3D Engine by Unkle Mike with extended features and 
 ./waf build
 ```
 
+**Note**
+The port for the moment is pretty rough, with some awful linker messages.
+
 
 ```
 Xash3D is a game engine, aimed to provide compatibility with Half-Life Engine, 

@@ -42,7 +42,7 @@ class Subproject:
 
                 if ctx.env.DEDICATED and self.dedicated:
                         return False
-
+                
                 return True
 
 SUBDIRS = [
@@ -123,19 +123,23 @@ def configure(conf):
 
         if conf.options.BUILD_WII:
             print("--Building for Wii--")
+            
+            print(conf.env.DEST_OS)
+
             conf.env.DEST_OS = "wii"
             conf.env.DEST_CPU = "powerpc"
 
             conf.env.CC = "/opt/devkitpro/devkitPPC/bin/powerpc-eabi-gcc"
             conf.env.CXX = "/opt/devkitpro/devkitPPC/bin/powerpc-eabi-g++"
 
-            WII_CFLAGS = "-Wall -logc -lbte -lwiiuse -lm -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -D__wii__ -D__ppc__".split()
-            WII_LDFLAGS = "-g -lm -Wl,-Map -mrvl -L/opt/devkitpro/devkitPPC/libogc/lib/wii".split()
+            WII_CFLAGS = "-MMD -MP -MF -g -Wall -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -D__wii__ -D__ppc__ -logc".split()
+            WII_LDFLAGS = "-g -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -Wl,-Map,out-xash-wii.map -L/opt/devkitpro/libogc/lib/wii -lwiiuse -lbte -logc -lm".split()
+
 
             conf.env.append_unique('CFLAGS', WII_CFLAGS)
             conf.env.append_unique('CXXFLAGS', WII_CFLAGS)
             conf.env.append_unique('LDFLAGS', WII_LDFLAGS)
-
+            
             conf.env.append_unique('INCLUDES', '/opt/devkitpro/libogc/include'.split())
             
 
@@ -231,7 +235,7 @@ def configure(conf):
         linker_flags = {
                 'common': {
                         'msvc':  ['/DEBUG'], # always create PDB, doesn't affect result binaries
-                        'gcc':   ['-Wl,--no-undefined'],
+#                        'gcc':   ['-Wl,--no-undefined'], # half life wii comments
                         'owcc':  ['-Wl,option stack=512k']
                 },
                 'sanitize': {
@@ -314,7 +318,7 @@ def configure(conf):
                 #'-Werror=implicit-function-declaration', half-life wii comment
                 '-Werror=int-conversion',
                 '-Werror=implicit-int',
-                '-Werror=strict-prototypes',
+                #'-Werror=strict-prototypes', half-life wii comment
                 '-Werror=old-style-declaration',
                 '-Werror=old-style-definition',
                 #'-Werror=declaration-after-statement', half-life wii comment
@@ -327,6 +331,7 @@ def configure(conf):
 
         # Here we don't differentiate C or C++ flags
         if conf.options.LTO:
+                print("LTO")
                 lto_cflags = {
                         'msvc':  ['/GL'],
                         'gcc':   ['-flto'],
@@ -342,6 +347,7 @@ def configure(conf):
                 linkflags += conf.get_flags_by_compiler(lto_linkflags, conf.env.COMPILER_CC)
 
         if conf.options.POLLY:
+                print("POLLY")
                 polly_cflags = {
                         'gcc':   ['-fgraphite-identity'],
                         'clang': ['-mllvm', '-polly']
@@ -439,6 +445,8 @@ def configure(conf):
 
                 conf.add_subproject(i.name)
 
+        print(conf.env.CFLAGS)
+        print(conf.env.LDFLAGS)
 def build(bld):
         bld.load('xshlib')
         for i in SUBDIRS:

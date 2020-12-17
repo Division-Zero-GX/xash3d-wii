@@ -13,6 +13,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
+// NOTE FOR HALF-LIFE WII
+// Changed the varibale net_socket to neti_socket because it clashed with the wii's function of the same name.
+
 #include "common.h"
 #include "client.h" // ConnectionProgress
 #include "netchan.h"
@@ -31,6 +34,17 @@ typedef int WSAsize_t;
 
 #define gethostbyname( a ) net_gethostbyname( a )
 #define recvfrom( a, b, c, d, e, f ) net_recvfrom( a, b, c, d, e, f )
+#define recv( a, b, c, d) net_recv(a, b, c, d) 
+#define sendto( a, b, c, d, e, f ) net_sendto( a, b, c, d, e, f )
+#define send( a, b, c, d ) net_send( a, b, c, d )
+#define socket( a, b, c ) net_socket( a, b, c )
+#define ioctlsocket(a, b, c) net_ioctl(a, b, c ) // not so sure about this lol
+#define connect(a, b, c) net_connect(a, b, c )
+#define setsockopt(a, b, c, d, e ) net_setsockopt(a, b, c, d, e )
+#define bind(a, b, c ) net_bind(a, b, c )
+
+#define gethostname(...) (-1)
+#define getsockname(...) (-1)
 
 #define SOCKET int
 #define IP_MULTICAST_LOOP 9
@@ -1143,18 +1157,18 @@ qboolean NET_QueuePacket( netsrc_t sock, netadr_t *from, byte *data, size_t *len
 {
 	byte		buf[NET_MAX_FRAGMENT];
 	int		ret;
-	int		net_socket;
+	int		neti_socket;
 	WSAsize_t	addr_len;
 	struct sockaddr	addr;
 
 	*length = 0;
 
-	net_socket = net.ip_sockets[sock];
+	neti_socket = net.ip_sockets[sock];
 
-	if( NET_IsSocketValid( net_socket ) )
+	if( NET_IsSocketValid( neti_socket ) )
 	{
 		addr_len = sizeof( addr );
-		ret = recvfrom( net_socket, buf, sizeof( buf ), 0, (struct sockaddr *)&addr, &addr_len );
+		ret = recvfrom( neti_socket, buf, sizeof( buf ), 0, (struct sockaddr *)&addr, &addr_len );
 
 		if( !NET_IsSocketError( ret ) )
 		{
@@ -1236,7 +1250,7 @@ NET_SendLong
 Fragment long packets, send short directly
 ==================
 */
-int NET_SendLong( netsrc_t sock, int net_socket, const char *buf, size_t len, int flags, const struct sockaddr *to, size_t tolen, size_t splitsize )
+int NET_SendLong( netsrc_t sock, int neti_socket, const char *buf, size_t len, int flags, const struct sockaddr *to, size_t tolen, size_t splitsize )
 {
 #ifdef NET_USE_FRAGMENTS
 	// do we need to break this packet up?
@@ -1276,7 +1290,7 @@ int NET_SendLong( netsrc_t sock, int net_socket, const char *buf, size_t len, in
 					packet_number + 1, packet_count, size, net.sequence_number, NET_AdrToString( adr ));
 			}
 
-			ret = sendto( net_socket, packet, size + sizeof( SPLITPACKET ), flags, to, tolen );
+			ret = sendto( neti_socket, packet, size + sizeof( SPLITPACKET ), flags, to, tolen );
 			if( ret < 0 ) return ret; // error
 
 			if( ret >= size )
@@ -1292,7 +1306,7 @@ int NET_SendLong( netsrc_t sock, int net_socket, const char *buf, size_t len, in
 #endif
 	{
 		// no fragmenantion for client connection
-		return sendto( net_socket, buf, len, flags, to, tolen );
+		return sendto( neti_socket, buf, len, flags, to, tolen );
 	}
 }
 
@@ -1305,7 +1319,7 @@ void NET_SendPacketEx( netsrc_t sock, size_t length, const void *data, netadr_t 
 {
 	int		ret;
 	struct sockaddr	addr;
-	SOCKET		net_socket = 0;
+	SOCKET		neti_socket = 0;
 
 	if( !net.initialized || to.type == NA_LOOPBACK )
 	{
@@ -1314,14 +1328,14 @@ void NET_SendPacketEx( netsrc_t sock, size_t length, const void *data, netadr_t 
 	}
 	else if( to.type == NA_BROADCAST )
 	{
-		net_socket = net.ip_sockets[sock];
-		if( !NET_IsSocketValid( net_socket ) )
+		neti_socket = net.ip_sockets[sock];
+		if( !NET_IsSocketValid( neti_socket ) )
 			return;
 	}
 	else if( to.type == NA_IP )
 	{
-		net_socket = net.ip_sockets[sock];
-		if( !NET_IsSocketValid( net_socket ) )
+		neti_socket = net.ip_sockets[sock];
+		if( !NET_IsSocketValid( neti_socket ) )
 			return;
 	}
 	else
@@ -1331,7 +1345,7 @@ void NET_SendPacketEx( netsrc_t sock, size_t length, const void *data, netadr_t 
 
 	NET_NetadrToSockadr( &to, &addr );
 
-	ret = NET_SendLong( sock, net_socket, data, length, 0, &addr, sizeof( addr ), splitsize );
+	ret = NET_SendLong( sock, neti_socket, data, length, 0, &addr, sizeof( addr ), splitsize );
 
 	if( NET_IsSocketError( ret ))
 	{
@@ -1441,11 +1455,11 @@ NET_Isocket
 static int NET_Isocket( const char *net_interface, int port, qboolean multicast )
 {
 	struct sockaddr_in	addr;
-	int		err, net_socket;
+	int		err, neti_socket;
 	uint		optval = 1;
 	dword		_true = 1;
 
-	if( NET_IsSocketError(( net_socket = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP )) ) )
+	if( NET_IsSocketError(( neti_socket = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP )) ) )
 	{
 		err = WSAGetLastError();
 		if( err != WSAEAFNOSUPPORT )
@@ -1453,28 +1467,28 @@ static int NET_Isocket( const char *net_interface, int port, qboolean multicast 
 		return INVALID_SOCKET;
 	}
 
-	if( NET_IsSocketError( ioctlsocket( net_socket, FIONBIO, (void*)&_true ) ) )
+	if( NET_IsSocketError( ioctlsocket( neti_socket, FIONBIO, (void*)&_true ) ) )
 	{
 		struct timeval timeout;
 
 		Con_DPrintf( S_WARN "NET_UDsocket: port: %d ioctl FIONBIO: %s\n", port, NET_ErrorString( ));
 		// try timeout instead of NBIO
 		timeout.tv_sec = timeout.tv_usec = 0;
-		setsockopt( net_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+		setsockopt( neti_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
 	}
 
 	// make it broadcast capable
-	if( NET_IsSocketError( setsockopt( net_socket, SOL_SOCKET, SO_BROADCAST, (char *)&_true, sizeof( _true ) ) ) )
+	if( NET_IsSocketError( setsockopt( neti_socket, SOL_SOCKET, SO_BROADCAST, (char *)&_true, sizeof( _true ) ) ) )
 	{
 		Con_DPrintf( S_WARN "NET_UDsocket: port: %d setsockopt SO_BROADCAST: %s\n", port, NET_ErrorString( ));
 	}
 
 	if( Sys_CheckParm( "-reuse" ) || multicast )
 	{
-		if( NET_IsSocketError( setsockopt( net_socket, SOL_SOCKET, SO_REUSEADDR, (const char *)&optval, sizeof( optval )) ) )
+		if( NET_IsSocketError( setsockopt( neti_socket, SOL_SOCKET, SO_REUSEADDR, (const char *)&optval, sizeof( optval )) ) )
 		{
 			Con_DPrintf( S_WARN "NET_UDsocket: port: %d setsockopt SO_REUSEADDR: %s\n", port, NET_ErrorString( ));
-			closesocket( net_socket );
+			closesocket( neti_socket );
 			return INVALID_SOCKET;
 		}
 	}
@@ -1484,12 +1498,12 @@ static int NET_Isocket( const char *net_interface, int port, qboolean multicast 
 		optval = 16;
 		Con_Printf( "Enabling LOWDELAY TOS option\n" );
 
-		if( NET_IsSocketError( setsockopt( net_socket, IPPROTO_IP, IP_TOS, (const char *)&optval, sizeof( optval )) ) )
+		if( NET_IsSocketError( setsockopt( neti_socket, IPPROTO_IP, IP_TOS, (const char *)&optval, sizeof( optval )) ) )
 		{
 			err = WSAGetLastError();
 			if( err != WSAENOPROTOOPT )
 				Con_Printf( S_WARN "NET_UDsocket: port: %d  setsockopt IP_TOS: %s\n", port, NET_ErrorString( ));
-			closesocket( net_socket );
+			closesocket( neti_socket );
 			return INVALID_SOCKET;
 		}
 	}
@@ -1503,21 +1517,21 @@ static int NET_Isocket( const char *net_interface, int port, qboolean multicast 
 
 	addr.sin_family = AF_INET;
 
-	if( NET_IsSocketError( bind( net_socket, (void *)&addr, sizeof( addr )) ) )
+	if( NET_IsSocketError( bind( neti_socket, (void *)&addr, sizeof( addr )) ) )
 	{
 		Con_DPrintf( S_WARN "NET_UDsocket: port: %d bind: %s\n", port, NET_ErrorString( ));
-		closesocket( net_socket );
+		closesocket( neti_socket );
 		return INVALID_SOCKET;
 	}
 
 	if( Sys_CheckParm( "-loopback" ))
 	{
 		optval = 1;
-		if( NET_IsSocketError( setsockopt( net_socket, IPPROTO_IP, IP_MULTICAST_LOOP, (const char *)&optval, sizeof( optval )) ) )
+		if( NET_IsSocketError( setsockopt( neti_socket, IPPROTO_IP, IP_MULTICAST_LOOP, (const char *)&optval, sizeof( optval )) ) )
 			Con_DPrintf( S_WARN "NET_UDsocket: port %d setsockopt IP_MULTICAST_LOOP: %s\n", port, NET_ErrorString( ));
 	}
 
-	return net_socket;
+	return neti_socket;
 }
 
 /*

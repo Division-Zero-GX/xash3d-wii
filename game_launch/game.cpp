@@ -20,7 +20,12 @@ GNU General Public License for more details.
 #include <stdlib.h>
 #include <stdarg.h>
 
-#if defined(__APPLE__) || defined(__unix__)
+#define debug_print(fmt, ...) \
+            do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)
+
+debug_print("hey");
+
+#if defined(__APPLE__) || defined(__unix__)  || defined(__wii__)
 	#define XASHLIB    "libxash." OS_LIB_EXT
 #elif _WIN32
 	#if !__MINGW32__ && _MSC_VER >= 1200
@@ -138,6 +143,7 @@ _inline int Sys_Start( void )
 }
 
 #ifndef USE_WINMAIN
+
 int main( int argc, char **argv )
 {
 	szArgc = argc;

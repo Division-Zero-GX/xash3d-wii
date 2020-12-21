@@ -54,7 +54,7 @@ GNU General Public License for more details.
 #if XASH_WII
 	#define PATH_SPLITTER "/"
 	#include <unistd.h>
-    #include <platform/wii/dll_wii.h> // include the references for RTLD_NOW
+    #include "../engine/platform/wii/dll_wii.h" // include the references for RTLD_NOW
 //	#include <dlfcn.h> NOT AVAIABLE ON WII
 	#define O_BINARY 0 // O_BINARY is Windows extension
 	#define O_TEXT 0 // O_TEXT is Windows extension

@@ -124,8 +124,6 @@ def configure(conf):
         if conf.options.BUILD_WII:
             print("--Building for Wii--")
             
-            print(conf.env.DEST_OS)
-
             conf.env.DEST_OS = "wii"
             conf.env.DEST_CPU = "powerpc"
 
@@ -134,10 +132,13 @@ def configure(conf):
 
             WII_CFLAGS = "-MMD -MP -MF -g -Wall -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -D__wii__ -D__ppc__ -logc".split()
             WII_LDFLAGS = "-g -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -Wl,-Map,out-xash-wii.map -L/opt/devkitpro/libogc/lib/wii -lwiiuse -lbte -logc -lm".split()
-
+    
+            WII_CXXFLAGS = []
+            WII_CXXFLAGS += ["-fno-rtti", "-fno-exceptions"]
+            WII_CXXFLAGS += WII_CFLAGS
 
             conf.env.append_unique('CFLAGS', WII_CFLAGS)
-            conf.env.append_unique('CXXFLAGS', WII_CFLAGS)
+            conf.env.append_unique('CXXFLAGS', WII_CXXFLAGS)
             conf.env.append_unique('LDFLAGS', WII_LDFLAGS)
             
             conf.env.append_unique('INCLUDES', '/opt/devkitpro/libogc/include'.split())
@@ -205,7 +206,6 @@ def configure(conf):
                 conf.env.LINKFLAGS_MAGX = ['-Wl,-rpath-link=' + i for i in conf.env.LIBPATH_MAGX]
                 for lib in ['qte-mt', 'ezxappbase', 'ezxpm', 'log_util']:
                         conf.check_cc(lib=lib, use='MAGX', uselib_store='MAGX')
-
         if enforce_pic:
                 # Every static library must have fPIC
                 if conf.env.DEST_OS != 'win32' and '-fPIC' in conf.env.CFLAGS_cshlib:
@@ -220,6 +220,7 @@ def configure(conf):
                         conf.env.CFLAGS_MACBUNDLE.remove('-fPIC')
                 if '-fPIC' in conf.env.CXXFLAGS_MACBUNDLE:
                         conf.env.CXXFLAGS_MACBUNDLE.remove('-fPIC')
+
 
         # We restrict 64-bit builds ONLY for Win/Linux/OSX running on Intel architecture
         # Because compatibility with original GoldSrc
@@ -331,7 +332,6 @@ def configure(conf):
 
         # Here we don't differentiate C or C++ flags
         if conf.options.LTO:
-                print("LTO")
                 lto_cflags = {
                         'msvc':  ['/GL'],
                         'gcc':   ['-flto'],
@@ -347,7 +347,6 @@ def configure(conf):
                 linkflags += conf.get_flags_by_compiler(lto_linkflags, conf.env.COMPILER_CC)
 
         if conf.options.POLLY:
-                print("POLLY")
                 polly_cflags = {
                         'gcc':   ['-fgraphite-identity'],
                         'clang': ['-mllvm', '-polly']
@@ -445,8 +444,6 @@ def configure(conf):
 
                 conf.add_subproject(i.name)
 
-        print(conf.env.CFLAGS)
-        print(conf.env.LDFLAGS)
 def build(bld):
         bld.load('xshlib')
         for i in SUBDIRS:

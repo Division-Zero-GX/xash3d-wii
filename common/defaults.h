@@ -27,7 +27,20 @@ SETUP BACKENDS DEFINITIONS
 ===================================================================
 */
 #if !XASH_DEDICATED
-	#if XASH_SDL
+    #if XASH_WII
+        #ifndef XASH_VIDEO
+            #define XASH_VIDEO VIDEO_WII
+        #endif
+
+        #ifndef XASH_INPUT
+            #define XASH_INPUT INPUT_WII
+        #endif
+        
+        #ifndef XASH_SOUND
+            #define XASH_SOUND SOUND_WII
+        #endif
+
+	#elif XASH_SDL
 		// we are building using libSDL
 		#ifndef XASH_VIDEO
 			#define XASH_VIDEO VIDEO_SDL

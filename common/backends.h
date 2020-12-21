@@ -21,6 +21,8 @@ GNU General Public License for more details.
 #define VIDEO_ANDROID 2
 #define VIDEO_FBDEV   3
 #define VIDEO_DOS     4
+// half-life wii video backend
+#define VIDEO_WII     5
 
 
 // audio backends (XASH_SOUND)
@@ -28,6 +30,8 @@ GNU General Public License for more details.
 #define SOUND_SDL      1
 #define SOUND_OPENSLES 2
 #define SOUND_ALSA     3
+// half-life wii audio backend
+#define SOUND_WII     5
 
 // crash handler (XASH_CRASHHANDLER)
 #define CRASHHANDLER_NULL     0
@@ -40,6 +44,8 @@ GNU General Public License for more details.
 #define INPUT_SDL     1
 #define INPUT_ANDROID 2
 #define INPUT_EVDEV   3
+// half-life wii input backend
+#define INPUT_WII     5
 
 // timer (XASH_TIMER)
 #define TIMER_NULL  0 // not used

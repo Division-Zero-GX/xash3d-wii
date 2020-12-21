@@ -12,7 +12,6 @@ def options(opt):
         return
 
 def configure(conf):
-        print("HELLO; GAME_LAUNCH CONFIGURATION IN HERE")
 
         conf.env.CC = "/opt/devkitpro/devkitPPC/bin/powerpc-eabi-gcc"
         conf.env.CXX = "/opt/devkitpro/devkitPPC/bin/powerpc-eabi-g++"
@@ -24,8 +23,12 @@ def build(bld):
         source = ['game.cpp']
         includes = '. ../common ../public'
         libs = []
+        
+        if bld.env.DEST_OS == 'wii':
+                source += ['../engine/platform/wii/dll_wii.c', '../public/crtlib.c']
+                includes += ' ../engine/common ../engine/client ../engine'
 
-        if bld.env.DEST_OS != 'win32':
+        elif bld.env.DEST_OS != 'win32':
                 libs += [ 'DL' ]
         else:
                 libs += ['USER32', 'SHELL32']

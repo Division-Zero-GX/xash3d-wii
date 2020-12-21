@@ -55,11 +55,12 @@ def configure(conf):
                 if conf.env.DEST_OS == 'linux':
                         conf.check_cc( lib='rt' )
                 conf.env.HAVE_SDL2 = True
-        else:
-                conf.load('sdl2')
-                if not conf.env.HAVE_SDL2:
-                        conf.fatal('SDL2 not availiable! If you want to build dedicated server, specify --dedicated')
-                conf.define('XASH_SDL', 2)
+        else:   
+                if conf.env.DEST_OS != 'wii':
+                    conf.load('sdl2')
+                    if not conf.env.HAVE_SDL2:
+                            conf.fatal('SDL2 not availiable! If you want to build dedicated server, specify --dedicated')
+                    conf.define('XASH_SDL', 2)
 
         if conf.options.USE_SELECT == None:
                 conf.options.USE_SELECT = conf.options.DEDICATED
@@ -79,7 +80,7 @@ def configure(conf):
         conf.define_cond('XASH_CUSTOM_SWAP', conf.options.CUSTOM_SWAP)
         conf.define_cond('SINGLE_BINARY', conf.env.SINGLE_BINARY)
         conf.define_cond('XASH_NO_ASYNC_NS_RESOLVE', conf.options.NO_ASYNC_RESOLVE)
-        conf.define_cond('XASH_USE_SELECT', conf.options.USE_SELECT) #or conf.options.DEDICATED) half-life wii comment
+        conf.define_cond('XASH_USE_SELECT', conf.options.USE_SELECT or conf.options.DEDICATED)
         conf.define_cond('SUPPORT_BSP2_FORMAT', conf.options.SUPPORT_BSP2_FORMAT)
         conf.define_cond('XASH_64BIT', conf.env.DEST_SIZEOF_VOID_P != 4)
         conf.define_cond('DBGHELP', conf.env.DEST_OS == 'win32')
@@ -101,7 +102,6 @@ def build(bld):
                 source += bld.path.ant_glob(['platform/win32/*.c'])
         # wii's build files
         elif bld.env.DEST_OS == 'wii':
-                print("--- DEST OS IS THE WII ---")
                 source += bld.path.ant_glob(['platform/wii/*.c'])
 
         elif bld.env.DEST_OS != 'dos': #posix

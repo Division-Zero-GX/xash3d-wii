@@ -20,11 +20,6 @@ GNU General Public License for more details.
 #include <stdlib.h>
 #include <stdarg.h>
 
-#define debug_print(fmt, ...) \
-            do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)
-
-debug_print("hey");
-
 #if defined(__APPLE__) || defined(__unix__)  || defined(__wii__)
 	#define XASHLIB    "libxash." OS_LIB_EXT
 #elif _WIN32

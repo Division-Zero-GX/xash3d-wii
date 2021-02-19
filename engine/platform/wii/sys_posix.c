@@ -17,7 +17,10 @@ GNU General Public License for more details.
 #include <stdlib.h>
 #include <time.h>
 #include "platform/platform.h"
+#include "vid_common.h"
 #include "menu_int.h"
+
+#include <fat.h>
 
 void Platform_Sleep(int msec) {
 
@@ -35,12 +38,165 @@ double Platform_DoubleTime(void) {
 
 void Platform_ShellExecute( const char *path, const char *parms )
 {
- //   fprintf("");
+
 }
 
+void Platform_RunEvents( void )
+{
 
+}
+
+void Platform_GetClipboardText( char *buffer, size_t size )
+{
+
+}
+
+void Platform_SetClipboardText( const char *buffer, size_t size )
+{
+
+}
+
+void GAME_EXPORT Platform_GetMousePos( int *x, int *y )
+{
+	*x = *y = 0;
+}
+
+void Platform_PreCreateMove( void )
+{
+
+}
+
+void GAME_EXPORT Platform_SetMousePos(int x, int y)
+{
+
+}
+
+void Platform_Vibrate(float life, char flags)
+{
+
+}
+int Platform_JoyInit( int numjoy )
+{
+	return 0;
+}
+
+void *Platform_GetNativeObject( const char *name )
+{
+	return NULL;
+}
 
 void Platform_Init( void ) {
-	printf("Platform Init");    
+	printf("\n---Platform-Init---\n");
+	if (!fatInitDefault()) {
+		printf("Couldn't initialize fat\n");
+    } 
 }
 void Platform_Shutdown( void ) {}
+
+
+void Platform_MouseMove( float *x, float *y )
+{
+
+}
+
+void Platform_EnableTextInput( qboolean enable )
+{
+
+}
+
+void SNDDMA_BeginPainting( void )
+{
+
+}
+
+void SNDDMA_Submit( void )
+{
+
+}
+
+int SNDDMA_GetSoundtime( void )
+{
+
+}
+
+qboolean SNDDMA_Init( void )
+{
+
+}
+
+void SNDDMA_Shutdown( void )
+{
+
+}
+
+// GX probably?
+
+void GL_UpdateSwapInterval( void )
+{
+
+}
+
+qboolean  R_Init_Video( const int type )
+{
+
+}
+
+void R_Free_Video( void )
+{
+
+}
+
+int GL_SetAttribute( int attr, int val )
+{
+
+}
+
+int GL_GetAttribute( int attr, int *val )
+{
+
+}
+
+void* GL_GetProcAddress( const char *name )
+{
+
+}
+
+void GL_SwapBuffers( void )
+{
+
+}
+
+qboolean SW_CreateBuffer( int width, int height, uint *stride, uint *bpp, uint *r, uint *g, uint *b )
+{
+
+}
+
+void *SW_LockBuffer( void )
+{
+
+}
+
+void SW_UnlockBuffer( void )
+{
+
+}
+
+vidmode_t* R_GetVideoMode( int num )
+{
+	return NULL;
+}
+
+rserr_t   R_ChangeDisplaySettings( int width, int height, qboolean fullscreen )
+{
+
+}
+
+int R_MaxVideoModes( void )
+{
+	return 0;
+}
+
+qboolean VID_SetMode( void )
+{
+
+}

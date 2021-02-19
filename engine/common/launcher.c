@@ -122,7 +122,7 @@ int main( int argc, char** argv )
 	printf("\x1b[2;0H");
 
 
-	printf("Hello World, Half-Life Wii!");
+	printf("Hello World, Half-Life Wii!\n");
     
 
     // Wait for the next frame

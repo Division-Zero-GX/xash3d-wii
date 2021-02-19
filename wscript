@@ -131,7 +131,7 @@ def configure(conf):
             conf.env.CXX = "/opt/devkitpro/devkitPPC/bin/powerpc-eabi-g++"
 
             WII_CFLAGS = "-MMD -MP -MF -g -Wall -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -D__wii__ -D__ppc__ -logc".split()
-            WII_LDFLAGS = "-g -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -Wl,-Map,out-xash-wii.map -L/opt/devkitpro/libogc/lib/wii -lwiiuse -lbte -logc -lm".split()
+            WII_LDFLAGS = "-g -DGEKKO -mrvl -mcpu=750 -meabi -mhard-float -Wl,-Map,out-xash-wii.map -L/opt/devkitpro/libogc/lib/wii -lfat -lwiiuse -lbte -logc -lm".split()
     
             WII_CXXFLAGS = []
             WII_CXXFLAGS += ["-fno-rtti", "-fno-exceptions"]
@@ -443,6 +443,7 @@ def configure(conf):
                         continue
 
                 conf.add_subproject(i.name)
+
 
 def build(bld):
         bld.load('xshlib')

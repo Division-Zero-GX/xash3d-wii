@@ -1970,6 +1970,7 @@ can be passed null arg
 */
 void FS_LoadGameInfo( const char *rootfolder )
 {
+
 	int	i;
 
 	// lock uplevel of gamedir for read\write
@@ -1984,12 +1985,18 @@ void FS_LoadGameInfo( const char *rootfolder )
 	// validate gamedir
 	for( i = 0; i < SI.numgames; i++ )
 	{
+		printf("GAMEFOLDER: ");
+		printf(SI.games[i]->gamefolder);
+		printf("\n");
 		if( !Q_stricmp( SI.games[i]->gamefolder, fs_gamedir ))
 			break;
 	}
 
+
 	if( i == SI.numgames )
 		Sys_Error( "Couldn't find game directory '%s'\n", fs_gamedir );
+
+	printf("1\n");
 
 	SI.GameInfo = SI.games[i];
 
@@ -2002,9 +2009,7 @@ void FS_LoadGameInfo( const char *rootfolder )
 	{
 		SI.clientlib[0] = 0;
 	}
-	
 	FS_Rescan(); // create new filesystem
-
 	Image_CheckPaletteQ1 ();
 	Host_InitDecals ();	// reload decals
 }
@@ -2086,8 +2091,10 @@ void FS_Init( void )
 
 	// validate directories
 	stringlistinit( &dirs );
-	listdirectory( &dirs, "./", false );
+	//listdirectory( &dirs, "./", false );
+	listdirectory( &dirs, "sd:/xash-wii", false );
 	stringlistsort( &dirs );
+
 
 	for( i = 0; i < dirs.numstrings; i++ )
 	{
@@ -2105,10 +2112,13 @@ void FS_Init( void )
 	}
 
 	// build list of game directories here
-	FS_AddGameDirectory( "./", 0 );
+	const char *dir_wii_fix = "./";
+
+	FS_AddGameDirectory( dir_wii_fix, 0 );
 
 	for( i = 0; i < dirs.numstrings; i++ )
 	{
+
 		if( !FS_SysFolderExists( dirs.strings[i] ) || ( !Q_strcmp( dirs.strings[i], ".." ) && !fs_ext_path ))
 			continue;
 
@@ -2421,6 +2431,7 @@ static searchpath_t *FS_FindFile( const char *name, int *index, qboolean gamedir
 	// search through the path, one element at a time
 	for( search = fs_searchpaths; search; search = search->next )
 	{
+
 		if( gamedironly & !FBitSet( search->flags, FS_GAMEDIRONLY_SEARCH_FLAGS ))
 			continue;
 
@@ -2516,8 +2527,12 @@ static searchpath_t *FS_FindFile( const char *name, int *index, qboolean gamedir
 
 			Q_sprintf( netpath, "%s%s", search->filename, name );
 
+			printf("NETPATH: %s\n", netpath);
+
 			if( FS_SysFileExists( netpath, !( search->flags & FS_CUSTOM_PATH ) ))
 			{
+				printf("inside\n");
+				sleep(2);
 				if( index != NULL ) *index = -1;
 				return search;
 			}

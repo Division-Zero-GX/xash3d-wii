@@ -103,6 +103,7 @@ def build(bld):
         # wii's build files
         elif bld.env.DEST_OS == 'wii':
                 source += bld.path.ant_glob(['platform/wii/*.c'])
+                libs += ['ref_gx']
 
         elif bld.env.DEST_OS != 'dos': #posix
                 libs += [ 'M', 'RT', 'PTHREAD', 'ASOUND']

@@ -22,6 +22,8 @@ GNU General Public License for more details.
 #include "ref_api.h"
 #include "studio.h"
 
+#include "cvar.h" //half-life wii
+
 #define LM_SAMPLE_SIZE		16
 #define LM_SAMPLE_EXTRASIZE		8
 

@@ -27,6 +27,7 @@ class Subproject:
                 self.mandatory = mandatory
 
         def is_enabled(self, ctx):
+                
                 if not self.mandatory:
                         if self.name in ctx.env.IGNORE_PROJECTS:
                                 self.ignore = True
@@ -40,6 +41,9 @@ class Subproject:
                 if ctx.env.DEST_OS == 'android' and self.singlebin:
                         return False
 
+                if ctx.env.DEST_OS == 'wii' and 'ref' in self.name and 'gl' in self.name:
+                        return False
+
                 if ctx.env.DEDICATED and self.dedicated:
                         return False
                 
@@ -49,6 +53,7 @@ SUBDIRS = [
         Subproject('public',      dedicated=False, mandatory = True),
         Subproject('game_launch', singlebin=True),
         Subproject('ref_gl',),
+        Subproject('ref_gx',),
         Subproject('ref_soft'),
         Subproject('mainui'),
         Subproject('vgui_support'),

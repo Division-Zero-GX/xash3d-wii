@@ -208,6 +208,8 @@ Default build-depended cvar and constant values
 #ifndef DEFAULT_ACCELERATED_RENDERER
 	#if XASH_MOBILE_PLATFORM
 		#define DEFAULT_ACCELERATED_RENDERER "gles1"
+	#elif XASH_WII
+		#define DEFAULT_ACCELERATED_RENDERER "gx"
 	#else // !XASH_MOBILE_PLATFORM
 		#define DEFAULT_ACCELERATED_RENDERER "gl"
 	#endif // !XASH_MOBILE_PLATFORM

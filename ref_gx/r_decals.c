@@ -103,8 +103,8 @@ static decal_t *R_DecalAlloc( decal_t *pdecal )
 {
 	int	limit = MAX_RENDER_DECALS;
 
-	if( r_decals->value < limit )
-		limit = r_decals->value;
+	if( r_decals_refgx->value < limit )
+		limit = r_decals_refgx->value;
 	
 	if( !limit ) return NULL;
 
@@ -138,7 +138,7 @@ static void R_GetDecalDimensions( int texture, int *width, int *height )
 	if( width ) *width = 1;	// to avoid divide by zero
 	if( height ) *height = 1;
 
-	R_GetTextureParms( width, height, texture );
+	R_GetTextureParms_refgx( width, height, texture );
 }
 
 //-----------------------------------------------------------------------------

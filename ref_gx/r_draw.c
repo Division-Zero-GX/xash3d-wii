@@ -20,7 +20,7 @@ GNU General Public License for more details.
 R_GetImageParms
 =============
 */
-void R_GetTextureParms( int *w, int *h, int texnum )
+void R_GetTextureParms_refgx( int *w, int *h, int texnum )
 {
 	image_t	*glt;
 
@@ -302,7 +302,7 @@ void GAME_EXPORT R_DrawTileClear( int texnum, int x, int y, int w, int h )
 	pixel_t *psrc, *pdest;
 
 	GL_SetRenderMode( kRenderNormal );
-	_TriColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+	_TriColor4f_refgx( 1.0f, 1.0f, 1.0f, 1.0f );
 	GL_Bind( XASH_TEXTURE0, texnum );
 
 	pic = R_GetTexture( texnum );

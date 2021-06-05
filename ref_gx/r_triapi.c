@@ -38,12 +38,12 @@ uint light;
 */
 /*
 =============
-TriRenderMode
+TriRenderMode_refgx
 
 set rendermode
 =============
 */
-void GAME_EXPORT TriRenderMode( int mode )
+void GAME_EXPORT TriRenderMode_refgx( int mode )
 {
 	ds.renderMode = vid.rendermode = mode;
 #if 0
@@ -137,11 +137,11 @@ void GAME_EXPORT TriEnd( void )
 
 /*
 =============
-_TriColor4f
+_TriColor4f_refgx
 
 =============
 */
-void GAME_EXPORT _TriColor4f( float rr, float gg, float bb, float aa )
+void GAME_EXPORT _TriColor4f_refgx( float rr, float gg, float bb, float aa )
 {
 	//pglColor4f( r, g, b, a );
 	unsigned short r,g,b;
@@ -187,29 +187,29 @@ void GAME_EXPORT _TriColor4f( float rr, float gg, float bb, float aa )
 
 /*
 =============
-TriColor4ub
+TriColor4ub_refgx
 
 =============
 */
-void TriColor4ub( byte r, byte g, byte b, byte a )
+void TriColor4ub_refgx( byte r, byte g, byte b, byte a )
 {
 	ds.triRGBA[0] = r * (1.0f / 255.0f);
 	ds.triRGBA[1] = g * (1.0f / 255.0f);
 	ds.triRGBA[2] = b * (1.0f / 255.0f);
 	ds.triRGBA[3] = a * (1.0f / 255.0f);
 
-	_TriColor4f( ds.triRGBA[0], ds.triRGBA[1], ds.triRGBA[2], 1.0f );
+	_TriColor4f_refgx( ds.triRGBA[0], ds.triRGBA[1], ds.triRGBA[2], 1.0f );
 }
 
 /*
 =============
-TriColor4ub
+TriColor4ub_refgx
 
 =============
 */
-void GAME_EXPORT _TriColor4ub( byte r, byte g, byte b, byte a )
+void GAME_EXPORT _TriColor4ub_refgx( byte r, byte g, byte b, byte a )
 {
-	_TriColor4f(	r * (1.0f / 255.0f),
+	_TriColor4f_refgx(	r * (1.0f / 255.0f),
 					g * (1.0f / 255.0f),
 					b * (1.0f / 255.0f),
 					a * (1.0f / 255.0f));
@@ -217,16 +217,16 @@ void GAME_EXPORT _TriColor4ub( byte r, byte g, byte b, byte a )
 
 /*
 =================
-TriColor4f
+TriColor4f_refgx
 =================
 */
-void TriColor4f( float r, float g, float b, float a )
+void TriColor4f_refgx( float r, float g, float b, float a )
 {
 	//if( a < 0.5 )
 	//	a = 1;
 	if( ds.renderMode == kRenderTransAlpha )
-		TriColor4ub( r * 255.0f, g * 255.0f, b * 255.0f, a * 255.0f );
-	else _TriColor4f( r * a, g * a, b * a, 1.0 );
+		TriColor4ub_refgx( r * 255.0f, g * 255.0f, b * 255.0f, a * 255.0f );
+	else _TriColor4f_refgx( r * a, g * a, b * a, 1.0 );
 
 	ds.triRGBA[0] = r;
 	ds.triRGBA[1] = g;
@@ -349,12 +349,12 @@ void GAME_EXPORT TriVertex3f( float x, float y, float z )
 
 /*
 =============
-TriWorldToScreen
+TriWorldToScreen_refgx
 
 convert world coordinates (x,y,z) into screen (x, y)
 =============
 */
-int GAME_EXPORT TriWorldToScreen( const float *world, float *screen )
+int GAME_EXPORT TriWorldToScreen_refgx( const float *world, float *screen )
 {
 	int	retval;
 
@@ -371,12 +371,12 @@ int GAME_EXPORT TriWorldToScreen( const float *world, float *screen )
 
 /*
 =============
-TriSpriteTexture
+TriSpriteTexture_refgx
 
 bind current texture
 =============
 */
-int TriSpriteTexture( model_t *pSpriteModel, int frame )
+int TriSpriteTexture_refgx( model_t *pSpriteModel, int frame )
 {
 	int	gl_texturenum;
 
@@ -461,11 +461,11 @@ void GAME_EXPORT TriFogParams( float flDensity, int iFogSkybox )
 
 /*
 =============
-TriCullFace
+TriCullFace_refgx
 
 =============
 */
-void GAME_EXPORT TriCullFace( TRICULLSTYLE mode )
+void GAME_EXPORT TriCullFace_refgx( TRICULLSTYLE mode )
 {
 #if 0
 	int glMode;
@@ -486,10 +486,10 @@ void GAME_EXPORT TriCullFace( TRICULLSTYLE mode )
 
 /*
 =============
-TriBrightness
+TriBrightness_refgx
 =============
 */
-void TriBrightness( float brightness )
+void TriBrightness_refgx( float brightness )
 {
 	float	r, g, b;
 
@@ -500,6 +500,6 @@ void TriBrightness( float brightness )
 	g = ds.triRGBA[1] * ds.triRGBA[3] * brightness;
 	b = ds.triRGBA[2] * ds.triRGBA[3] * brightness;
 
-	_TriColor4f( r, g, b, 1.0f );
+	_TriColor4f_refgx( r, g, b, 1.0f );
 }
 

@@ -138,12 +138,12 @@ static const dframetype_t *R_SpriteLoadGroup( model_t *mod, const void *pin, msp
 
 /*
 ====================
-Mod_LoadSpriteModel
+Mod_LoadSpriteModel_refgx
 
 load sprite model
 ====================
 */
-void Mod_LoadSpriteModel( model_t *mod, const void *buffer, qboolean *loaded, uint texFlags )
+void Mod_LoadSpriteModel_refgx( model_t *mod, const void *buffer, qboolean *loaded, uint texFlags )
 {
 	const dsprite_t		*pin;
 	const short		*numi = NULL;
@@ -699,7 +699,7 @@ qboolean R_SpriteOccluded( cl_entity_t *e, vec3_t origin, float *pscale )
 		float	blend;
 		vec3_t	v;
 
-		TriWorldToScreen( origin, v );
+		TriWorldToScreen_refgx( origin, v );
 
 		if( v[0] < RI.viewport[0] || v[0] > RI.viewport[0] + RI.viewport[2] )
 			return true; // do scissor
@@ -1028,7 +1028,7 @@ void R_DrawSpriteModel( cl_entity_t *e )
 	if( oldframe == frame )
 	{
 		// draw the single non-lerped frame
-		_TriColor4f( color[0], color[1], color[2], tr.blend );
+		_TriColor4f_refgx( color[0], color[1], color[2], tr.blend );
 		GL_Bind( XASH_TEXTURE0, frame->gl_texturenum );
 		R_DrawSpriteQuad( frame, origin, v_right, v_up, scale );
 	}
@@ -1040,14 +1040,14 @@ void R_DrawSpriteModel( cl_entity_t *e )
 
 		if( ilerp != 0.0f )
 		{
-			_TriColor4f( color[0], color[1], color[2], tr.blend * ilerp );
+			_TriColor4f_refgx( color[0], color[1], color[2], tr.blend * ilerp );
 			GL_Bind( XASH_TEXTURE0, oldframe->gl_texturenum );
 			R_DrawSpriteQuad( oldframe, origin, v_right, v_up, scale );
 		}
 
 		if( lerp != 0.0f )
 		{
-			_TriColor4f( color[0], color[1], color[2], tr.blend * lerp );
+			_TriColor4f_refgx( color[0], color[1], color[2], tr.blend * lerp );
 			GL_Bind( XASH_TEXTURE0, frame->gl_texturenum );
 			R_DrawSpriteQuad( frame, origin, v_right, v_up, scale );
 		}

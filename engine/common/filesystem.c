@@ -2527,12 +2527,8 @@ static searchpath_t *FS_FindFile( const char *name, int *index, qboolean gamedir
 
 			Q_sprintf( netpath, "%s%s", search->filename, name );
 
-			printf("NETPATH: %s\n", netpath);
-
 			if( FS_SysFileExists( netpath, !( search->flags & FS_CUSTOM_PATH ) ))
 			{
-				printf("inside\n");
-				sleep(2);
 				if( index != NULL ) *index = -1;
 				return search;
 			}

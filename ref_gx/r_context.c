@@ -22,7 +22,7 @@ ref_speeds_t r_stats;
 byte *r_temppool;
 cvar_t *gl_emboss_scale;
 cvar_t *r_norefresh;
-cvar_t	*vid_brightness;
+cvar_t	*vid_brightness_refgx;
 viddef_t vid;
 static void GAME_EXPORT R_ClearScreen( void )
 {
@@ -65,7 +65,7 @@ CL_FillRGBA
 static void GAME_EXPORT CL_FillRGBA( float _x, float _y, float _w, float _h, int r, int g, int b, int a )
 {
 	vid.rendermode = kRenderTransAdd;
-	_TriColor4ub(r,g,b,a);
+	_TriColor4ub_refgx(r,g,b,a);
 	Draw_Fill(_x,_y,_w,_h);
 }
 
@@ -78,7 +78,7 @@ pfnFillRGBABlend
 static void GAME_EXPORT CL_FillRGBABlend( float _x, float _y, float _w, float _h, int r, int g, int b, int a )
 {
 	vid.rendermode = kRenderTransAlpha;
-	_TriColor4ub(r,g,b,a);
+	_TriColor4ub_refgx(r,g,b,a);
 	Draw_Fill(_x,_y,_w,_h);
 }
 void Mod_UnloadTextures( model_t *mod );
@@ -97,7 +97,7 @@ qboolean GAME_EXPORT Mod_ProcessRenderData( model_t *mod, qboolean create, const
 				 //Mod_LoadStudioModel( mod, buf, loaded );
 				break;
 			case mod_sprite:
-				Mod_LoadSpriteModel( mod, buf, &loaded, mod->numtexinfo );
+				Mod_LoadSpriteModel_refgx( mod, buf, &loaded, mod->numtexinfo );
 				break;
 			case mod_alias:
 				//Mod_LoadAliasModel( mod, buf, &loaded );
@@ -334,7 +334,7 @@ void GAME_EXPORT R_ShowTextures( void )
 	// textures undone too
 }
 
-void GAME_EXPORT R_ShowTree( void )
+void GAME_EXPORT R_ShowTree_refgx( void )
 {
 	// do we really need this here???
 }
@@ -432,8 +432,8 @@ static void* GAME_EXPORT R_GetProcAddress( const char *name )
 
 ref_interface_t gReffuncs =
 {
-	R_Init,
-	R_Shutdown,
+	R_Init_refgx,
+	R_Shutdown_refgx,
 	R_GetConfigName,
 	R_SetDisplayTransform,
 
@@ -548,20 +548,20 @@ ref_interface_t gReffuncs =
 	R_ClearScene,
 	R_GetProcAddress,
 
-	TriRenderMode,
+	TriRenderMode_refgx,
 	TriBegin,
 	TriEnd,
-	_TriColor4f,
-	_TriColor4ub,
+	_TriColor4f_refgx,
+	_TriColor4ub_refgx,
 	TriTexCoord2f,
 	TriVertex3fv,
 	TriVertex3f,
-	TriWorldToScreen,
+	TriWorldToScreen_refgx,
 	TriFog,
 	R_ScreenToWorld,
 	TriGetMatrix,
 	TriFogParams,
-	TriCullFace,
+	TriCullFace_refgx,
 
 	VGUI_DrawInit,
 	VGUI_DrawShutdown,

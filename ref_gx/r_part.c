@@ -91,11 +91,11 @@ void GAME_EXPORT CL_DrawParticles( double frametime, particle_t *cl_active_parti
 			if( alpha > 255 || p->type == pt_static )
 				alpha = 255;
 
-			//TriColor4ub( gEngfuncs.LightToTexGamma( pColor->r ),
+			//TriColor4ub_refgx( gEngfuncs.LightToTexGamma( pColor->r ),
 			//	gEngfuncs.LightToTexGamma( pColor->g ),
 		//		gEngfuncs.LightToTexGamma( pColor->b ), alpha );
-			//TriBrightness( alpha / 255.0f );
-			_TriColor4f(1.0f*alpha/255/255*pColor->r,1.0f*alpha/255/255*pColor->g,1.0f*alpha/255/255* pColor->b,1.0f );
+			//TriBrightness_refgx( alpha / 255.0f );
+			_TriColor4f_refgx(1.0f*alpha/255/255*pColor->r,1.0f*alpha/255/255*pColor->g,1.0f*alpha/255/255* pColor->b,1.0f );
 
 			TriBegin( TRI_QUADS );
 			TriTexCoord2f( 0.0f, 1.0f );
@@ -187,7 +187,7 @@ void GAME_EXPORT CL_DrawTracers( double frametime, particle_t *cl_active_tracers
 
 	GL_SetRenderMode( kRenderTransAdd );
 
-	if( !TriSpriteTexture( gEngfuncs.GetDefaultSprite( REF_DOT_SPRITE ), 0 ))
+	if( !TriSpriteTexture_refgx( gEngfuncs.GetDefaultSprite( REF_DOT_SPRITE ), 0 ))
 		return;
 
 	//pglEnable( GL_BLEND );
@@ -216,8 +216,8 @@ void GAME_EXPORT CL_DrawTracers( double frametime, particle_t *cl_active_tracers
 			short alpha = p->packedColor;
 
 			// Transform point into screen space
-			TriWorldToScreen( start, screen );
-			TriWorldToScreen( end, screenLast );
+			TriWorldToScreen_refgx( start, screen );
+			TriWorldToScreen_refgx( end, screenLast );
 
 			// build world-space normal to screen-space direction vector
 			VectorSubtract( screen, screenLast, tmp );
@@ -244,8 +244,8 @@ void GAME_EXPORT CL_DrawTracers( double frametime, particle_t *cl_active_tracers
 			}
 
 			pColor = &gTracerColors[p->color];
-			//TriColor4ub( pColor->r, pColor->g, pColor->b, p->packedColor );
-			_TriColor4f(1.0f*alpha/255/255*pColor->r,1.0f*alpha/255/255*pColor->g,1.0f*alpha/255/255* pColor->b,1.0f );
+			//TriColor4ub_refgx( pColor->r, pColor->g, pColor->b, p->packedColor );
+			_TriColor4f_refgx(1.0f*alpha/255/255*pColor->r,1.0f*alpha/255/255*pColor->g,1.0f*alpha/255/255* pColor->b,1.0f );
 
 
 			TriBegin( TRI_QUADS );

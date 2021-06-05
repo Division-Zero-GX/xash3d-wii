@@ -91,14 +91,14 @@ cvar_t	*traceralpha;
 cvar_t	*r_speeds;
 cvar_t	*r_lightlevel;	//FIXME HACK
 
-cvar_t	*vid_fullscreen;
-cvar_t	*vid_gamma;
+cvar_t	*vid_fullscreen_refgx;
+cvar_t	*vid_gamma_refgx;
 
 //PGM
 cvar_t	*sw_lockpvs;
 //PGM
 
-cvar_t	*r_decals;
+cvar_t	*r_decals_refgx;
 
 int	r_viewcluster, r_oldviewcluster;
 
@@ -1678,19 +1678,19 @@ void GAME_EXPORT R_BeginFrame( qboolean clearScene )
 		D_FlushCaches( );
 
 		// next frame will be restored gamma
-		SetBits( vid_brightness->flags, FCVAR_CHANGED );
-		SetBits( vid_gamma->flags, FCVAR_CHANGED );
+		SetBits( vid_brightness_refgx->flags, FCVAR_CHANGED );
+		SetBits( vid_gamma_refgx->flags, FCVAR_CHANGED );
 	}
 	else
 #endif
-	if( FBitSet( vid_gamma->flags, FCVAR_CHANGED ) || FBitSet( vid_brightness->flags, FCVAR_CHANGED ))
+	if( FBitSet( vid_gamma_refgx->flags, FCVAR_CHANGED ) || FBitSet( vid_brightness_refgx->flags, FCVAR_CHANGED ))
 	{
-		gEngfuncs.BuildGammaTable( vid_gamma->value, vid_brightness->value );
+		gEngfuncs.BuildGammaTable( vid_gamma_refgx->value, vid_brightness_refgx->value );
 
 		D_FlushCaches( );
 		// next frame will be restored gamma
-		ClearBits( vid_brightness->flags, FCVAR_CHANGED );
-		ClearBits( vid_gamma->flags, FCVAR_CHANGED );
+		ClearBits( vid_brightness_refgx->flags, FCVAR_CHANGED );
+		ClearBits( vid_gamma_refgx->flags, FCVAR_CHANGED );
 	}
 
 	R_Set2DMode( true );
@@ -1923,15 +1923,15 @@ void R_InitTurb (void)
 
 
 
-qboolean GAME_EXPORT R_Init( void )
+qboolean GAME_EXPORT R_Init_refgx( void )
 {
 	qboolean glblit = false;
 
 	gl_emboss_scale = gEngfuncs.Cvar_Get( "gl_emboss_scale", "0", FCVAR_ARCHIVE|FCVAR_LATCH, "fake bumpmapping scale" );
-	vid_gamma = gEngfuncs.pfnGetCvarPointer( "gamma", 0 );
+	vid_gamma_refgx = gEngfuncs.pfnGetCvarPointer( "gamma", 0 );
 	r_norefresh = gEngfuncs.Cvar_Get( "r_norefresh", "0", 0, "disable 3D rendering (use with caution)" );
 	r_drawentities = gEngfuncs.Cvar_Get( "r_drawentities", "1", FCVAR_CHEAT, "render entities" );
-	vid_brightness = gEngfuncs.pfnGetCvarPointer( "brightness", 0 );
+	vid_brightness_refgx = gEngfuncs.pfnGetCvarPointer( "brightness", 0 );
 	r_fullbright = gEngfuncs.Cvar_Get( "r_fullbright", "0", FCVAR_CHEAT, "disable lightmaps, get fullbright for entities" );
 
 	r_dynamic = gEngfuncs.Cvar_Get( "r_dynamic", "1", FCVAR_ARCHIVE, "allow dynamic lighting (dlights, lightstyles)" );
@@ -1959,7 +1959,7 @@ qboolean GAME_EXPORT R_Init( void )
 #endif
 	//r_lefthand = ri.Cvar_Get( "hand", "0", FCVAR_USERINFO | FCVAR_ARCHIVE );
 //	r_speeds = ri.Cvar_Get ("r_speeds", "0", 0);
-	r_decals = gEngfuncs.pfnGetCvarPointer( "r_decals", 0 );
+	r_decals_refgx = gEngfuncs.pfnGetCvarPointer( "r_decals_refgx", 0 ); //NOT SURE
 	//r_drawworld = ri.Cvar_Get ("r_drawworld", "1", 0);
 	//r_dspeeds = ri.Cvar_Get ("r_dspeeds", "0", 0);
 //	r_lightlevel = ri.Cvar_Get ("r_lightlevel", "0", 0);
@@ -2006,7 +2006,7 @@ qboolean GAME_EXPORT R_Init( void )
 	return true;
 }
 
-void GAME_EXPORT R_Shutdown( void )
+void GAME_EXPORT R_Shutdown_refgx( void )
 {
 	R_ShutdownImages();
 	gEngfuncs.R_Free_Video();

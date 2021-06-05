@@ -89,7 +89,11 @@ void Platform_Init( void ) {
 	printf("\n---Platform-Init---\n");
 	if (!fatInitDefault()) {
 		printf("Couldn't initialize fat\n");
-    } 
+	}
+
+	printf("Initializing dll hack...");
+	setup_wii_dll_functions();
+	printf("Done\n");
 }
 void Platform_Shutdown( void ) {}
 

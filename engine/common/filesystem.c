@@ -1985,7 +1985,6 @@ void FS_LoadGameInfo( const char *rootfolder )
 	// validate gamedir
 	for( i = 0; i < SI.numgames; i++ )
 	{
-		printf("GAMEFOLDER: ");
 		printf(SI.games[i]->gamefolder);
 		printf("\n");
 		if( !Q_stricmp( SI.games[i]->gamefolder, fs_gamedir ))

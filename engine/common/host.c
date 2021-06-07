@@ -1007,9 +1007,7 @@ int EXPORT Host_Main( int argc, char **argv, const char *progname, int bChangeGa
 
 	pChangeGame = func;	// may be NULL
 
-	printf("1 HOST MAIN");
 	Host_InitCommon( argc, argv, progname, bChangeGame );
-	printf("2");
 	// init commands and vars
 	if( host_developer.value >= DEV_EXTENDED )
 	{
@@ -1017,7 +1015,6 @@ int EXPORT Host_Main( int argc, char **argv, const char *progname, int bChangeGa
 		Cmd_AddCommand ( "host_error", Host_Error_f, "just throw a host error to test shutdown procedures");
 		Cmd_AddCommand ( "crash", Host_Crash_f, "a way to force a bus error for development reasons");
 	}
-	printf("3");
 	host_serverstate = Cvar_Get( "host_serverstate", "0", FCVAR_READ_ONLY, "displays current server state" );
 	host_maxfps = Cvar_Get( "fps_max", "72", FCVAR_ARCHIVE, "host fps upper limit" );
 	host_framerate = Cvar_Get( "host_framerate", "0", 0, "locks frame timing to this value in seconds" );  
@@ -1026,19 +1023,13 @@ int EXPORT Host_Main( int argc, char **argv, const char *progname, int bChangeGa
 	host_clientloaded = Cvar_Get( "host_clientloaded", "0", FCVAR_READ_ONLY, "inidcates a loaded client.dll" );
 	host_limitlocal = Cvar_Get( "host_limitlocal", "0", 0, "apply cl_cmdrate and rate to loopback connection" );
 	con_gamemaps = Cvar_Get( "con_mapfilter", "1", FCVAR_ARCHIVE, "when true show only maps in game folder" );
-	printf("4bruh");
 	build = Cvar_Get( "buildnum", va( "%i", Q_buildnum_compat()), FCVAR_READ_ONLY, "returns a current build number" );
 	ver = Cvar_Get( "ver", va( "%i/%s (hw build %i)", PROTOCOL_VERSION, XASH_COMPAT_VERSION, Q_buildnum_compat()), FCVAR_READ_ONLY, "shows an engine version" );
 	Cvar_Get( "host_ver", va( "%i %s %s %s %s", Q_buildnum(), XASH_VERSION, Q_buildos(), Q_buildarch(), Q_buildcommit() ), FCVAR_READ_ONLY, "detailed info about this build" );
-	printf("5");
 	Mod_Init();
-	printf("6");
 	NET_Init();
-	printf("7");
 	NET_InitMasters();
-	printf("8");
 	Netchan_Init();
-	printf("9");
 
 	// allow to change game from the console
 	if( pChangeGame != NULL )

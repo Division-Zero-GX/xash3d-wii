@@ -350,69 +350,7 @@ static void R_Unlock_GLES3( void )
 
 static qboolean R_CreateBuffer_GLES3( int width, int height, uint *stride, uint *bpp, uint *r, uint *g, uint *b )
 {
-	float data[] = {
-		// quad verts match texcoords
-		0, 0,
-		1, 0,
-		1, 1,
-		0, 1,
-	};
-	int vbo, pbo, fbo, to;
-
-	// shitty fbo does not work without texture objects :(
-	pglGenTextures( 1, &to );
-	pglBindTexture( GL_TEXTURE_2D, to );
-	pglViewport( 0, 0, width, height );
-	/*
-	pglMatrixMode( GL_PROJECTION );
-	pglLoadIdentity();
-	// project 0..1 to screen size
-	pglOrtho( 0, 1, 1, 0, -99999, 99999 );
-	pglMatrixMode( GL_MODELVIEW );
-	pglLoadIdentity();
-
-	pglEnable( GL_TEXTURE_2D );
-	pglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-	pglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-
-	if( vbo )
-		pglDeleteBuffers( 1,&vbo );
-
-	if( pbo )
-		pglDeleteBuffers( 1,&pbo );
-	*/
-
-	//pglGenBuffers( 1,&vbo );
-	pglGenBuffers( 1, &pbo );
-	//pglBindBuffer( GL_ARRAY_BUFFER_ARB, vbo );
-	//pglBufferData( GL_ARRAY_BUFFER_ARB, sizeof(data), data, GL_STATIC_DRAW_ARB );
-
-	//pglEnableClientState( GL_VERTEX_ARRAY );
-	//pglEnableClientState( GL_TEXTURE_COORD_ARRAY );
-
-	//pglVertexPointer( 2, GL_FLOAT, 8, 0 );
-	//pglTexCoordPointer( 2, GL_FLOAT, 8, 0 );
-	//pglBindBuffer( GL_ARRAY_BUFFER_ARB, 0 );
-
-	pglBindBuffer( GL_PIXEL_UNPACK_BUFFER, pbo );
-	pglBufferData( GL_PIXEL_UNPACK_BUFFER, width * height * 2, 0, GL_STREAM_DRAW_ARB );
-	pglTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, 0 );
-
-	pglGenFramebuffers(1, &fbo);
-	pglBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
-	pglFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, to, 0);
-	pglBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-
-	//pglColor4f( 1, 1, 1, 1 );
-
-
-	*stride = width;
-	*bpp = 2;
-	*r = MASK(5) << (6 + 5);
-	*g = MASK(6) << 5;
-	*b = MASK(5);
-
-	return true;
+    printf("R_CreateBuffer_GLES3");
 }
 
 

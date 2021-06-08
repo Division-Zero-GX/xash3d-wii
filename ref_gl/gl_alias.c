@@ -1274,14 +1274,14 @@ static void R_AliasDrawAbsBBox( cl_entity_t *e, const vec3_t absmin, const vec3_
 	}
 
 	GL_Bind( XASH_TEXTURE0, tr.whiteTexture );
-	TriColor4f( 0.5f, 0.5f, 1.0f, 0.5f );
-	TriRenderMode( kRenderTransAdd );
+	TriColor4f_refgx( 0.5f, 0.5f, 1.0f, 0.5f );
+	TriRenderMode_refgx( kRenderTransAdd );
 	pglTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
 	TriBegin( TRI_QUADS );
 	for( i = 0; i < 6; i++ )
 	{
-		TriBrightness( g_alias.shadelight / 255.0f );
+		TriBrightness_refgx( g_alias.shadelight / 255.0f );
 		TriVertex3fv( p[boxpnt[i][0]] );
 		TriVertex3fv( p[boxpnt[i][1]] );
 		TriVertex3fv( p[boxpnt[i][2]] );
@@ -1289,7 +1289,7 @@ static void R_AliasDrawAbsBBox( cl_entity_t *e, const vec3_t absmin, const vec3_
 	}
 	TriEnd();
 
-	TriRenderMode( kRenderNormal );
+	TriRenderMode_refgx( kRenderNormal );
 }
 
 static void R_AliasDrawLightTrace( cl_entity_t *e )

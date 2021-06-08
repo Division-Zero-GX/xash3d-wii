@@ -1149,8 +1149,8 @@ void R_StudioBuildNormalTable( void )
 	g_studio.chrome_origin[2] = cos( r_glowshellfreq->value * g_studio.time * 0.33f ) * 4000.0f;
 
 	if( e->curstate.rendercolor.r || e->curstate.rendercolor.g || e->curstate.rendercolor.b )
-		TriColor4ub( e->curstate.rendercolor.r, e->curstate.rendercolor.g, e->curstate.rendercolor.b, 255 );
-	else TriColor4ub( 255, 255, 255, 255 );
+		TriColor4ub_refgx( e->curstate.rendercolor.r, e->curstate.rendercolor.g, e->curstate.rendercolor.b, 255 );
+	else TriColor4ub_refgx( 255, 255, 255, 255 );
 }
 
 /*
@@ -1905,10 +1905,10 @@ void R_StudioRenderShadow( int iSprite, float *p1, float *p2, float *p3, float *
 	if( !p1 || !p2 || !p3 || !p4 )
 		return;
 
-	if( TriSpriteTexture( gEngfuncs.pfnGetModelByIndex( iSprite ), 0 ))
+	if( TriSpriteTexture_refgx( gEngfuncs.pfnGetModelByIndex( iSprite ), 0 ))
 	{
-		TriRenderMode( kRenderTransAlpha );
-		TriColor4f( 0.0f, 0.0f, 0.0f, 1.0f );
+		TriRenderMode_refgx( kRenderTransAlpha );
+		TriColor4f_refgx( 0.0f, 0.0f, 0.0f, 1.0f );
 
 		pglBegin( GL_QUADS );
 			pglTexCoord2f( 0.0f, 0.0f );
@@ -1921,7 +1921,7 @@ void R_StudioRenderShadow( int iSprite, float *p1, float *p2, float *p3, float *
 			pglVertex3fv( p4 );
 		pglEnd();
 
-		TriRenderMode( kRenderNormal );
+		TriRenderMode_refgx( kRenderNormal );
 	}
 }
 
@@ -2501,7 +2501,7 @@ static void R_StudioDrawHulls( void )
 		j = (pbbox[i].group % 8);
 
 		TriBegin( TRI_QUADS );
-		TriColor4f( hullcolor[j][0], hullcolor[j][1], hullcolor[j][2], alpha );
+		TriColor4f_refgx( hullcolor[j][0], hullcolor[j][1], hullcolor[j][2], alpha );
 
 		for( j = 0; j < 6; j++ )
 		{
@@ -2509,7 +2509,7 @@ static void R_StudioDrawHulls( void )
 			tmp[j % 3] = (j < 3) ? 1.0f : -1.0f;
 			R_StudioLighting( &lv, pbbox[i].bone, 0, tmp );
 
-			TriBrightness( lv );
+			TriBrightness_refgx( lv );
 			TriVertex3fv( p[boxpnt[j][0]] );
 			TriVertex3fv( p[boxpnt[j][1]] );
 			TriVertex3fv( p[boxpnt[j][2]] );
@@ -2539,8 +2539,8 @@ static void R_StudioDrawAbsBBox( void )
 		return;
 
 	GL_Bind( XASH_TEXTURE0, tr.whiteTexture );
-	TriColor4f( 0.5f, 0.5f, 1.0f, 0.5f );
-	TriRenderMode( kRenderTransAdd );
+	TriColor4f_refgx( 0.5f, 0.5f, 1.0f, 0.5f );
+	TriRenderMode_refgx( kRenderTransAdd );
 
 	TriBegin( TRI_QUADS );
 	for( i = 0; i < 6; i++ )
@@ -2549,14 +2549,14 @@ static void R_StudioDrawAbsBBox( void )
 		tmp[i % 3] = (i < 3) ? 1.0f : -1.0f;
 		R_StudioLighting( &lv, -1, 0, tmp );
 
-		TriBrightness( lv );
+		TriBrightness_refgx( lv );
 		TriVertex3fv( p[boxpnt[i][0]] );
 		TriVertex3fv( p[boxpnt[i][1]] );
 		TriVertex3fv( p[boxpnt[i][2]] );
 		TriVertex3fv( p[boxpnt[i][3]] );
 	}
 	TriEnd();
-	TriRenderMode( kRenderNormal );
+	TriRenderMode_refgx( kRenderNormal );
 }
 
 /*
@@ -3121,9 +3121,9 @@ void R_StudioRenderFinal( void )
 
 	if( r_drawentities->value == 4 )
 	{
-		TriRenderMode( kRenderTransAdd );
+		TriRenderMode_refgx( kRenderTransAdd );
 		R_StudioDrawHulls( );
-		TriRenderMode( kRenderNormal );
+		TriRenderMode_refgx( kRenderNormal );
 	}
 
 	if( r_drawentities->value == 5 )
@@ -3190,7 +3190,7 @@ void R_StudioRenderModel( void )
 		R_StudioRenderFinal( );
 
 		R_StudioSetForceFaceFlags( STUDIO_NF_CHROME );
-		TriSpriteTexture( R_GetChromeSprite(), 0 );
+		TriSpriteTexture_refgx( R_GetChromeSprite(), 0 );
 		RI.currententity->curstate.renderfx = kRenderFxGlowShell;
 
 		R_StudioRenderFinal( );

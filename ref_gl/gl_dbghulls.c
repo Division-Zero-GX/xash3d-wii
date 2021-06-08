@@ -32,14 +32,14 @@ void R_DrawWorldHull( void )
 	winding_t		*poly;
 	int		i;
 
-	if( FBitSet( r_showhull->flags, FCVAR_CHANGED ))
+	if( FBitSet( r_showhull_refgx->flags, FCVAR_CHANGED ))
 	{
-		int val = bound( 0, (int)r_showhull->value, 3 );
+		int val = bound( 0, (int)r_showhull_refgx->value, 3 );
 		if( val ) gEngfuncs.Mod_CreatePolygonsForHull( val );
-		ClearBits( r_showhull->flags, FCVAR_CHANGED );
+		ClearBits( r_showhull_refgx->flags, FCVAR_CHANGED );
 	}
 
-	if( !CVAR_TO_BOOL( r_showhull ))
+	if( !CVAR_TO_BOOL( r_showhull_refgx ))
 		return;
 	pglDisable( GL_TEXTURE_2D );
 
@@ -61,7 +61,7 @@ void R_DrawModelHull( void )
 	winding_t		*poly;
 	int		i;
 
-	if( !CVAR_TO_BOOL( r_showhull ))
+	if( !CVAR_TO_BOOL( r_showhull_refgx ))
 		return;
 
 	if( !RI.currentmodel || RI.currentmodel->name[0] != '*' )

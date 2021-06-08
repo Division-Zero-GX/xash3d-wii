@@ -32,12 +32,12 @@ static struct
 */
 /*
 =============
-TriRenderMode
+TriRenderMode_refgx
 
 set rendermode
 =============
 */
-void TriRenderMode( int mode )
+void TriRenderMode_refgx( int mode )
 {
 	ds.renderMode = mode;
 	switch( mode )
@@ -149,7 +149,7 @@ TriColor4ub
 
 =============
 */
-void TriColor4ub( byte r, byte g, byte b, byte a )
+void TriColor4ub_refgx( byte r, byte g, byte b, byte a )
 {
 	ds.triRGBA[0] = r * (1.0f / 255.0f);
 	ds.triRGBA[1] = g * (1.0f / 255.0f);
@@ -164,10 +164,10 @@ void TriColor4ub( byte r, byte g, byte b, byte a )
 TriColor4f
 =================
 */
-void TriColor4f( float r, float g, float b, float a )
+void TriColor4f_refgx( float r, float g, float b, float a )
 {
 	if( ds.renderMode == kRenderTransAlpha )
-		TriColor4ub( r * 255.9f, g * 255.9f, b * 255.9f, a * 255.0f );
+		TriColor4ub_refgx( r * 255.9f, g * 255.9f, b * 255.9f, a * 255.0f );
 	else _TriColor4f( r * a, g * a, b * a, 1.0 );
 
 	ds.triRGBA[0] = r;
@@ -211,12 +211,12 @@ void TriVertex3f( float x, float y, float z )
 
 /*
 =============
-TriWorldToScreen
+TriWorldToScreen_refgx
 
 convert world coordinates (x,y,z) into screen (x, y)
 =============
 */
-int TriWorldToScreen( const float *world, float *screen )
+int TriWorldToScreen_refgx( const float *world, float *screen )
 {
 	int	retval;
 
@@ -232,12 +232,12 @@ int TriWorldToScreen( const float *world, float *screen )
 
 /*
 =============
-TriSpriteTexture
+TriSpriteTexture_refgx
 
 bind current texture
 =============
 */
-int TriSpriteTexture( model_t *pSpriteModel, int frame )
+int TriSpriteTexture_refgx( model_t *pSpriteModel, int frame )
 {
 	int	gl_texturenum;
 
@@ -320,11 +320,11 @@ void TriFogParams( float flDensity, int iFogSkybox )
 
 /*
 =============
-TriCullFace
+TriCullFace_refgx
 
 =============
 */
-void TriCullFace( TRICULLSTYLE mode )
+void TriCullFace_refgx( TRICULLSTYLE mode )
 {
 	int glMode;
 
@@ -343,10 +343,10 @@ void TriCullFace( TRICULLSTYLE mode )
 
 /*
 =============
-TriBrightness
+TriBrightness_refgx
 =============
 */
-void TriBrightness( float brightness )
+void TriBrightness_refgx( float brightness )
 {
 	float	r, g, b;
 

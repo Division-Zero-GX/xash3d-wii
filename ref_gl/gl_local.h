@@ -447,7 +447,7 @@ void CL_DrawTracers( double frametime, particle_t *cl_active_tracers );
 // gl_sprite.c
 //
 void R_SpriteInit( void );
-void Mod_LoadSpriteModel( model_t *mod, const void *buffer, qboolean *loaded, uint texFlags );
+void Mod_LoadSpriteModel_refgx( model_t *mod, const void *buffer, qboolean *loaded, uint texFlags );
 mspriteframe_t *R_GetSpriteFrame( const model_t *pModel, int frame, float yaw );
 void R_DrawSpriteModel( cl_entity_t *e );
 
@@ -510,8 +510,8 @@ int VGUI_GenerateTexture( void );
 //
 // renderer exports
 //
-qboolean R_Init( void );
-void R_Shutdown( void );
+qboolean R_Init_refgx( void );
+void R_Shutdown_refgx( void );
 void GL_SetupAttributes( int safegl );
 void GL_OnContextCreated( void );
 void GL_InitExtensions( void );
@@ -525,7 +525,7 @@ void R_BeginFrame( qboolean clearScene );
 void R_RenderFrame( const struct ref_viewpass_s *vp );
 void R_EndFrame( void );
 void R_ClearScene( void );
-void R_GetTextureParms( int *w, int *h, int texnum );
+void R_GetTextureParms_refgx( int *w, int *h, int texnum );
 void R_GetSpriteParms( int *frameWidth, int *frameHeight, int *numFrames, int curFrame, const struct model_s *pSprite );
 void R_DrawStretchRaw( float x, float y, float w, float h, int cols, int rows, const byte *data, qboolean dirty );
 void R_DrawStretchPic( float x, float y, float w, float h, float s1, float t1, float s2, float t2, int texnum );
@@ -568,7 +568,7 @@ void GL_SetExtension( int r_ext, int enable );
 //
 // gl_triapi.c
 //
-void TriRenderMode( int mode );
+void TriRenderMode_refgx( int mode );
 void TriBegin( int mode );
 void TriEnd( void );
 void TriTexCoord2f( float u, float v );
@@ -576,15 +576,15 @@ void TriVertex3fv( const float *v );
 void TriVertex3f( float x, float y, float z );
 void _TriColor4f( float r, float g, float b, float a );
 void _TriColor4ub( byte r, byte g, byte b, byte a );
-void TriColor4f( float r, float g, float b, float a );
-void TriColor4ub( byte r, byte g, byte b, byte a );
-void TriBrightness( float brightness );
-int TriWorldToScreen( const float *world, float *screen );
-int TriSpriteTexture( model_t *pSpriteModel, int frame );
+void TriColor4f_refgx( float r, float g, float b, float a );
+void TriColor4ub_refgx( byte r, byte g, byte b, byte a );
+void TriBrightness_refgx( float brightness );
+int TriWorldToScreen_refgx( const float *world, float *screen );
+int TriSpriteTexture_refgx( model_t *pSpriteModel, int frame );
 void TriFog( float flFogColor[3], float flStart, float flEnd, int bOn );
 void TriGetMatrix( const int pname, float *matrix );
 void TriFogParams( float flDensity, int iFogSkybox );
-void TriCullFace( TRICULLSTYLE mode );
+void TriCullFace_refgx( TRICULLSTYLE mode );
 
 /*
 =======================================================================
@@ -699,7 +699,7 @@ typedef struct
 extern glconfig_t		glConfig;
 extern glstate_t		glState;
 // move to engine
-extern glwstate_t		glw_state;
+extern glwstate_t		glw_state_refgx;
 extern ref_api_t      gEngfuncs;
 extern ref_globals_t *gpGlobals;
 
@@ -723,7 +723,7 @@ extern cvar_t	*gl_wireframe;
 extern cvar_t	*gl_polyoffset;
 extern cvar_t	*gl_finish;
 extern cvar_t	*gl_nosort;
-extern cvar_t	*gl_clear;
+extern cvar_t	*gl_clear_refgx;
 extern cvar_t	*gl_test;		// cvar to testify new effects
 extern cvar_t	*gl_msaa;
 extern cvar_t *gl_stencilbits;
@@ -737,7 +737,7 @@ extern cvar_t	*r_lighting_ambient;
 extern cvar_t	*r_studio_lambert;
 extern cvar_t	*r_detailtextures;
 extern cvar_t	*r_drawentities;
-extern cvar_t	*r_decals;
+extern cvar_t	*r_decals_refgx;
 extern cvar_t	*r_novis;
 extern cvar_t	*r_nocull;
 extern cvar_t	*r_lockpvs;
@@ -748,19 +748,19 @@ extern cvar_t	*r_lightmap;
 extern cvar_t *r_vbo;
 extern cvar_t *r_vbo_dlightmode;
 
-extern cvar_t	*vid_brightness;
-extern cvar_t	*vid_gamma;
+extern cvar_t	*vid_brightness_refgx;
+extern cvar_t	*vid_gamma_refgx;
 
 //
 // engine shared convars
 //
-extern cvar_t *gl_showtextures;
+extern cvar_t *gl_showtextures_refgx;
 extern cvar_t	*tracerred;
 extern cvar_t	*tracergreen;
 extern cvar_t	*tracerblue;
 extern cvar_t	*traceralpha;
-extern cvar_t	*cl_lightstyle_lerping;
-extern cvar_t	*r_showhull;
+extern cvar_t	*cl_lightstyle_lerping_refgx;
+extern cvar_t	*r_showhull_refgx;
 
 //
 // engine callbacks

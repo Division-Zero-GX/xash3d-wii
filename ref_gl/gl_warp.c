@@ -658,7 +658,7 @@ void R_InitSkyClouds( mip_t *mt, texture_t *tx, qboolean custom_palette )
 	int	i, j, p;
 	char	texname[32];
 
-	if( !glw_state.initialized )
+	if( !glw_state_refgx.initialized )
 		return;
 
 	Q_snprintf( texname, sizeof( texname ), "%s%s.mip", ( mt->offsets[0] > 0 ) ? "#" : "", tx->name );

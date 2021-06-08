@@ -74,7 +74,7 @@ void CL_RunLightStyles( void )
 			tr.lightstylevalue[i] = ls->map[0] * 22 * scale;
 			continue;
 		}
-		else if( !ls->interp || !CVAR_TO_BOOL( cl_lightstyle_lerping ))
+		else if( !ls->interp || !CVAR_TO_BOOL( cl_lightstyle_lerping_refgx ))
 		{
 			tr.lightstylevalue[i] = ls->map[flight%ls->length] * 22 * scale;
 			continue;

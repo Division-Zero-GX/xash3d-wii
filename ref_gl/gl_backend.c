@@ -248,7 +248,7 @@ GL_CleanupAllTextureUnits
 */
 void GL_CleanupAllTextureUnits( void )
 {
-	if( !glw_state.initialized ) return;
+	if( !glw_state_refgx.initialized ) return;
 	// force to cleanup all the units
 	GL_SelectTexture( GL_MaxTextureUnits() - 1 );
 	GL_CleanUpTextureUnits( 0 );
@@ -619,7 +619,7 @@ void R_ShowTextures( void )
 	static qboolean	showHelp = true;
 	string		shortname;
 
-	if( !CVAR_TO_BOOL( gl_showtextures ))
+	if( !CVAR_TO_BOOL( gl_showtextures_refgx ))
 		return;
 
 	if( showHelp )
@@ -637,8 +637,8 @@ void R_ShowTextures( void )
 
 rebuild_page:
 	total = base_w * base_h;
-	start = total * (gl_showtextures->value - 1);
-	end = total * gl_showtextures->value;
+	start = total * (gl_showtextures_refgx->value - 1);
+	end = total * gl_showtextures_refgx->value;
 	if( end > MAX_TEXTURES ) end = MAX_TEXTURES;
 
 	w = gpGlobals->width / base_w;
@@ -653,10 +653,10 @@ rebuild_page:
 		if( pglIsTexture( image->texnum )) j++;
 	}
 
-	if( i == MAX_TEXTURES && gl_showtextures->value != 1 )
+	if( i == MAX_TEXTURES && gl_showtextures_refgx->value != 1 )
 	{
 		// bad case, rewind to one and try again
-		gEngfuncs.Cvar_SetValue( "r_showtextures", max( 1, gl_showtextures->value - 1 ));
+		gEngfuncs.Cvar_SetValue( "r_showtextures", max( 1, gl_showtextures_refgx->value - 1 ));
 		if( ++numTries < 2 ) goto rebuild_page;	// to prevent infinite loop
 	}
 

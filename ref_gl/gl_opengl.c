@@ -14,8 +14,8 @@ cvar_t	*gl_polyoffset;
 cvar_t	*gl_wireframe;
 cvar_t	*gl_finish;
 cvar_t	*gl_nosort;
-cvar_t	*gl_vsync;
-cvar_t	*gl_clear;
+cvar_t	*gl_vsync_refgx;
+cvar_t	*gl_clear_refgx;
 cvar_t	*gl_test;
 cvar_t	*gl_msaa;
 cvar_t	*gl_stencilbits;
@@ -27,8 +27,8 @@ cvar_t	*r_lighting_modulate;
 cvar_t	*r_lighting_ambient;
 cvar_t	*r_detailtextures;
 cvar_t	*r_drawentities;
-cvar_t	*r_adjust_fov;
-cvar_t	*r_decals;
+cvar_t	*r_adjust_fov_refgx;
+cvar_t	*r_decals_refgx;
 cvar_t	*r_novis;
 cvar_t	*r_nocull;
 cvar_t	*r_lockpvs;
@@ -36,15 +36,15 @@ cvar_t	*r_lockfrustum;
 cvar_t	*r_traceglow;
 cvar_t	*r_dynamic;
 cvar_t	*r_lightmap;
-cvar_t	*r_showhull;
+cvar_t	*r_showhull_refgx;
 cvar_t	*gl_round_down;
 cvar_t	*r_vbo;
 cvar_t	*r_vbo_dlightmode;
-cvar_t	*gl_showtextures;
-cvar_t	*cl_lightstyle_lerping;
+cvar_t	*gl_showtextures_refgx;
+cvar_t	*cl_lightstyle_lerping_refgx;
 
-cvar_t	*vid_brightness;
-cvar_t	*vid_gamma;
+cvar_t	*vid_brightness_refgx;
+cvar_t	*vid_gamma_refgx;
 cvar_t	*tracerred;
 cvar_t	*tracergreen;
 cvar_t	*tracerblue;
@@ -55,7 +55,7 @@ byte		*r_temppool;
 gl_globals_t	tr;
 glconfig_t	glConfig;
 glstate_t	glState;
-glwstate_t	glw_state;
+glwstate_t	glw_state_refgx;
 
 #ifdef XASH_GL_STATIC
 #define GL_CALL( x ) #x, NULL
@@ -390,12 +390,12 @@ qboolean GL_CheckExtension( const char *name, const dllfunc_t *funcs, const char
 
 /*
 ==============
-GL_GetProcAddress
+GL_GetProcAddress_refgx
 
 defined just for nanogl/glwes, so it don't link to SDL2 directly, nor use dlsym
 ==============
 */
-void GAME_EXPORT *GL_GetProcAddress( const char *name )
+void GAME_EXPORT *GL_GetProcAddress_refgx( const char *name )
 {
 	return gEngfuncs.GL_GetProcAddress( name );
 }
@@ -538,7 +538,7 @@ void R_RenderInfo_f( void )
 	gEngfuncs.Con_Printf( "\n" );
 	gEngfuncs.Con_Printf( "MODE: %ix%i\n", gpGlobals->width, gpGlobals->height );
 	gEngfuncs.Con_Printf( "\n" );
-	gEngfuncs.Con_Printf( "VERTICAL SYNC: %s\n", gl_vsync->value ? "enabled" : "disabled" );
+	gEngfuncs.Con_Printf( "VERTICAL SYNC: %s\n", gl_vsync_refgx->value ? "enabled" : "disabled" );
 	gEngfuncs.Con_Printf( "Color %d bits, Alpha %d bits, Depth %d bits, Stencil %d bits\n", glConfig.color_bits,
 		glConfig.alpha_bits, glConfig.depth_bits, glConfig.stencil_bits );
 }
@@ -597,7 +597,7 @@ void GL_InitExtensionsGLES( void )
 			GL_CheckExtension( "GL_OES_texture_npot", NULL, "gl_texture_npot", extid );
 			break;
 		case GL_DEBUG_OUTPUT:
-			if( glw_state.extended )
+			if( glw_state_refgx.extended )
 				GL_CheckExtension( "GL_KHR_debug", NULL, NULL, extid );
 			break;
 		// case GL_TEXTURE_COMPRESSION_EXT: NOPE
@@ -747,7 +747,7 @@ void GL_InitExtensionsBigGL( void )
 	}
 
 	// this won't work without extended context
-	if( glw_state.extended )
+	if( glw_state_refgx.extended )
 		GL_CheckExtension( "GL_ARB_debug_output", debugoutputfuncs, "gl_debug_output", GL_DEBUG_OUTPUT );
 }
 #endif
@@ -809,14 +809,14 @@ void GL_InitExtensions( void )
 	R_RenderInfo_f();
 
 	tr.framecount = tr.visframecount = 1;
-	glw_state.initialized = true;
+	glw_state_refgx.initialized = true;
 }
 
 void GL_ClearExtensions( void )
 {
 	// now all extensions are disabled
 	memset( glConfig.extension, 0, sizeof( glConfig.extension ));
-	glw_state.initialized = false;
+	glw_state_refgx.initialized = false;
 }
 
 //=======================================================================
@@ -843,23 +843,23 @@ void GL_InitCommands( void )
 	r_traceglow = gEngfuncs.Cvar_Get( "r_traceglow", "1", FCVAR_ARCHIVE, "cull flares behind models" );
 	r_lightmap = gEngfuncs.Cvar_Get( "r_lightmap", "0", FCVAR_CHEAT, "lightmap debugging tool" );
 	r_drawentities = gEngfuncs.Cvar_Get( "r_drawentities", "1", FCVAR_CHEAT, "render entities" );
-	r_decals = gEngfuncs.pfnGetCvarPointer( "r_decals", 0 );
-	r_showhull = gEngfuncs.pfnGetCvarPointer( "r_showhull", 0 );
+	r_decals_refgx = gEngfuncs.pfnGetCvarPointer( "r_decals", 0 );
+	r_showhull_refgx = gEngfuncs.pfnGetCvarPointer( "r_showhull_refgx", 0 );
 
 	gl_extensions = gEngfuncs.Cvar_Get( "gl_allow_extensions", "1", FCVAR_GLCONFIG, "allow gl_extensions" );
 	gl_texture_nearest = gEngfuncs.Cvar_Get( "gl_texture_nearest", "0", FCVAR_ARCHIVE, "disable texture filter" );
 	gl_lightmap_nearest = gEngfuncs.Cvar_Get( "gl_lightmap_nearest", "0", FCVAR_ARCHIVE, "disable lightmap filter" );
 	gl_check_errors = gEngfuncs.Cvar_Get( "gl_check_errors", "1", FCVAR_ARCHIVE, "ignore video engine errors" );
-	gl_vsync = gEngfuncs.pfnGetCvarPointer( "gl_vsync", 0 );
+	gl_vsync_refgx = gEngfuncs.pfnGetCvarPointer( "gl_vsync_refgx", 0 );
 	gl_detailscale = gEngfuncs.Cvar_Get( "gl_detailscale", "4.0", FCVAR_ARCHIVE, "default scale applies while auto-generate list of detail textures" );
 	gl_texture_anisotropy = gEngfuncs.Cvar_Get( "gl_anisotropy", "8", FCVAR_ARCHIVE, "textures anisotropic filter" );
 	gl_texture_lodbias =  gEngfuncs.Cvar_Get( "gl_texture_lodbias", "0.0", FCVAR_ARCHIVE, "LOD bias for mipmapped textures (perfomance|quality)" );
 	gl_keeptjunctions = gEngfuncs.Cvar_Get( "gl_keeptjunctions", "1", FCVAR_ARCHIVE, "removing tjuncs causes blinking pixels" );
 	gl_emboss_scale = gEngfuncs.Cvar_Get( "gl_emboss_scale", "0", FCVAR_ARCHIVE|FCVAR_LATCH, "fake bumpmapping scale" );
-	gl_showtextures = gEngfuncs.pfnGetCvarPointer( "r_showtextures", 0 );
+	gl_showtextures_refgx = gEngfuncs.pfnGetCvarPointer( "r_showtextures", 0 );
 	gl_finish = gEngfuncs.Cvar_Get( "gl_finish", "0", FCVAR_ARCHIVE, "use glFinish instead of glFlush" );
 	gl_nosort = gEngfuncs.Cvar_Get( "gl_nosort", "0", FCVAR_ARCHIVE, "disable sorting of translucent surfaces" );
-	gl_clear = gEngfuncs.pfnGetCvarPointer( "gl_clear", 0 );
+	gl_clear_refgx = gEngfuncs.pfnGetCvarPointer( "gl_clear", 0 ); //NOT SURE
 	gl_test = gEngfuncs.Cvar_Get( "gl_test", "0", 0, "engine developer cvar for quick testing new features" );
 	gl_wireframe = gEngfuncs.Cvar_Get( "gl_wireframe", "0", FCVAR_ARCHIVE|FCVAR_SPONLY, "show wireframe overlay" );
 	gl_msaa = gEngfuncs.Cvar_Get( "gl_msaa", "1", FCVAR_ARCHIVE, "enable or disable multisample anti-aliasing" );
@@ -868,18 +868,18 @@ void GL_InitCommands( void )
 	// these cvar not used by engine but some mods requires this
 	gl_polyoffset = gEngfuncs.Cvar_Get( "gl_polyoffset", "2.0", FCVAR_ARCHIVE, "polygon offset for decals" );
 
-	// make sure gl_vsync is checked after vid_restart
-	SetBits( gl_vsync->flags, FCVAR_CHANGED );
+	// make sure gl_vsync_refgx is checked after vid_restart
+	SetBits( gl_vsync_refgx->flags, FCVAR_CHANGED );
 
-	vid_gamma = gEngfuncs.pfnGetCvarPointer( "gamma", 0 );
-	vid_brightness = gEngfuncs.pfnGetCvarPointer( "brightness", 0 );
+	vid_gamma_refgx = gEngfuncs.pfnGetCvarPointer( "gamma", 0 );
+	vid_brightness_refgx = gEngfuncs.pfnGetCvarPointer( "brightness", 0 );
 
 	tracerred = gEngfuncs.Cvar_Get( "tracerred", "0.8", 0, "tracer red component weight ( 0 - 1.0 )" );
 	tracergreen = gEngfuncs.Cvar_Get( "tracergreen", "0.8", 0, "tracer green component weight ( 0 - 1.0 )" );
 	tracerblue = gEngfuncs.Cvar_Get( "tracerblue", "0.4", 0, "tracer blue component weight ( 0 - 1.0 )" );
 	traceralpha = gEngfuncs.Cvar_Get( "traceralpha", "0.5", 0, "tracer alpha amount ( 0 - 1.0 )" );
 
-	cl_lightstyle_lerping = gEngfuncs.pfnGetCvarPointer( "cl_lightstyle_lerping", 0 );
+	cl_lightstyle_lerping_refgx = gEngfuncs.pfnGetCvarPointer( "cl_lightstyle_lerping_refgx", 0 );
 
 	gEngfuncs.Cmd_AddCommand( "r_info", R_RenderInfo_f, "display renderer info" );
 	gEngfuncs.Cmd_AddCommand( "timerefresh", SCR_TimeRefresh_f, "turn quickly and print rendering statistcs" );
@@ -944,9 +944,9 @@ void GL_RemoveCommands( void )
 R_Init
 ===============
 */
-qboolean R_Init( void )
+qboolean R_Init_refgx( void )
 {
-	if( glw_state.initialized )
+	if( glw_state_refgx.initialized )
 		return true;
 
 	GL_InitCommands();
@@ -983,9 +983,9 @@ qboolean R_Init( void )
 R_Shutdown
 ===============
 */
-void R_Shutdown( void )
+void R_Shutdown_refgx( void )
 {
-	if( !glw_state.initialized )
+	if( !glw_state_refgx.initialized )
 		return;
 
 	GL_RemoveCommands();
@@ -1081,7 +1081,7 @@ void GL_SetupAttributes( int safegl )
 		gEngfuncs.Con_Reportf( "Creating an extended GL context for debug...\n" );
 		SetBits( context_flags, FCONTEXT_DEBUG_ARB );
 		gEngfuncs.GL_SetAttribute( REF_GL_CONTEXT_FLAGS, REF_GL_CONTEXT_DEBUG_FLAG );
-		glw_state.extended = true;
+		glw_state_refgx.extended = true;
 	}
 
 	if( safegl > SAFE_DONTCARE )
@@ -1185,7 +1185,7 @@ void *GL4ES_GetProcAddress( const char *name )
 	if( !Q_strcmp(name, "glShadeModel") )
 		// combined gles/gles2/gl implementation exports this, but it is invalid
 		return NULL;
-	return gEngfuncs.GL_GetProcAddress( name );
+	return gEngfuncs.GL_GetProcAddress_refgx( name );
 }
 
 #endif

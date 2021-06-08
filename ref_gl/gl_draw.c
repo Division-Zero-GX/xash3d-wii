@@ -20,7 +20,7 @@ GNU General Public License for more details.
 R_GetImageParms
 =============
 */
-void R_GetTextureParms( int *w, int *h, int texnum )
+void R_GetTextureParms_refgx( int *w, int *h, int texnum )
 {
 	gl_texture_t	*glt;
 

@@ -1000,9 +1000,9 @@ void R_CheckGamma( void )
 		if( gEngfuncs.drawFuncs->GL_BuildLightmaps )
 			gEngfuncs.drawFuncs->GL_BuildLightmaps( );
 	}
-	else if( FBitSet( vid_gamma->flags, FCVAR_CHANGED ) || FBitSet( vid_brightness->flags, FCVAR_CHANGED ))
+	else if( FBitSet( vid_gamma_refgx->flags, FCVAR_CHANGED ) || FBitSet( vid_brightness_refgx->flags, FCVAR_CHANGED ))
 	{
-		gEngfuncs.BuildGammaTable( vid_gamma->value, vid_brightness->value );
+		gEngfuncs.BuildGammaTable( vid_gamma_refgx->value, vid_brightness_refgx->value );
 		glConfig.softwareGammaUpdate = true;
 		GL_RebuildLightmaps();
 		glConfig.softwareGammaUpdate = false;
@@ -1018,7 +1018,7 @@ void R_BeginFrame( qboolean clearScene )
 {
 	glConfig.softwareGammaUpdate = false;	// in case of possible fails
 
-	if(( gl_clear->value || ENGINE_GET_PARM( PARM_DEV_OVERVIEW )) &&
+	if(( gl_clear_refgx->value || ENGINE_GET_PARM( PARM_DEV_OVERVIEW )) &&
 		clearScene && ENGINE_GET_PARM( PARM_CONNSTATE ) != ca_cinematic )
 	{
 		pglClear( GL_COLOR_BUFFER_BIT );

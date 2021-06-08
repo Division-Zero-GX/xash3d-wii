@@ -140,7 +140,7 @@ qboolean Mod_ProcessRenderData( model_t *mod, qboolean create, const byte *buf )
 				// Mod_LoadStudioModel( mod, buf, loaded );
 				break;
 			case mod_sprite:
-				Mod_LoadSpriteModel( mod, buf, &loaded, mod->numtexinfo );
+				Mod_LoadSpriteModel_refgx( mod, buf, &loaded, mod->numtexinfo );
 				break;
 			case mod_alias:
 				Mod_LoadAliasModel( mod, buf, &loaded );
@@ -351,8 +351,8 @@ static const char *R_GetConfigName( void )
 
 ref_interface_t gReffuncs =
 {
-	R_Init,
-	R_Shutdown,
+	R_Init_refgx,
+	R_Shutdown_refgx,
 	R_GetConfigName,
 	R_SetDisplayTransform,
 
@@ -467,7 +467,7 @@ ref_interface_t gReffuncs =
 	R_ClearScene,
 	R_GetProcAddress,
 
-	TriRenderMode,
+	TriRenderMode_refgx,
 	TriBegin,
 	TriEnd,
 	_TriColor4f,
@@ -475,12 +475,12 @@ ref_interface_t gReffuncs =
 	TriTexCoord2f,
 	TriVertex3fv,
 	TriVertex3f,
-	TriWorldToScreen,
+	TriWorldToScreen_refgx,
 	TriFog,
 	R_ScreenToWorld,
 	TriGetMatrix,
 	TriFogParams,
-	TriCullFace,
+	TriCullFace_refgx,
 
 	VGUI_DrawInit,
 	VGUI_DrawShutdown,

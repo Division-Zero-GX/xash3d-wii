@@ -181,7 +181,7 @@ void CL_DrawTracers( double frametime, particle_t *cl_active_tracers )
 	if( !cl_active_tracers )
 		return;	// nothing to draw?
 
-	if( !TriSpriteTexture( gEngfuncs.GetDefaultSprite( REF_DOT_SPRITE ), 0 ))
+	if( !TriSpriteTexture_refgx( gEngfuncs.GetDefaultSprite( REF_DOT_SPRITE ), 0 ))
 		return;
 
 	pglEnable( GL_BLEND );
@@ -209,8 +209,8 @@ void CL_DrawTracers( double frametime, particle_t *cl_active_tracers )
 			color24	*pColor;
 
 			// Transform point into screen space
-			TriWorldToScreen( start, screen );
-			TriWorldToScreen( end, screenLast );
+			TriWorldToScreen_refgx( start, screen );
+			TriWorldToScreen_refgx( end, screenLast );
 
 			// build world-space normal to screen-space direction vector
 			VectorSubtract( screen, screenLast, tmp );

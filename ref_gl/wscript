@@ -70,58 +70,11 @@ def build(bld):
         if bld.env.GL:
                 bld(
                         source   = source,
-                        target   = 'ref_gl',
-                        features = 'c',
+                        target   = 'ref_gx',
+                        features = 'c cstlib',
                         includes = includes,
                         use      = libs + (['GL'] if bld.env.GL_STATIC else []),
                         defines  = ['XASH_GL_STATIC'] if bld.env.GL_STATIC else [],
                         install_path = bld.env.LIBDIR,
                         subsystem = bld.env.MSVC_SUBSYSTEM
                 )
-
-        if bld.env.NANOGL:
-                bld.add_subproject('nanogl')
-                bld.shlib(
-                        source   = source,
-                        target   = 'ref_gles1',
-                        features = 'c',
-                        includes = includes,
-                        use      = libs + ['DL', 'nanogl'],
-                        defines  = ['XASH_NANOGL'],
-                        install_path = bld.env.LIBDIR,
-                        subsystem = bld.env.MSVC_SUBSYSTEM)
-
-        if bld.env.GLWES:
-                bld.add_subproject('gl-wes-v2')
-                bld.shlib(
-                        source   = source,
-                        target   = 'ref_gles2',
-                        features = 'c',
-                        includes = includes,
-                        use      = libs + ['DL', 'gl-wes-v2'],
-                        defines  = ['XASH_WES'],
-                        install_path = bld.env.LIBDIR,
-                        subsystem = bld.env.MSVC_SUBSYSTEM)
-
-        if bld.env.GL4ES:
-                gl4es_srcdir = bld.path.find_node('gl4es/src')
-
-                bld.stlib(
-                        source   = gl4es_srcdir.ant_glob(['gl/*.c', 'gl/*/*.c', 'glx/hardext.c']),
-                        target   = 'gl4es',
-                        features = 'c',
-                        includes = ['gl4es/src', 'gl4es/src/gl', 'gl4es/src/glx', 'gl4es/include'],
-                        defines = ['NOX11', 'NO_GBM', 'NO_INIT_CONSTRUCTOR', 'DEFAULT_ES=2', 'NOEGL', 'EXTERNAL_GETPROCADDRESS=GL4ES_GetProcAddress', 'NO_LOADER', 'STATICLIB'],
-                        cflags = ['-w', '-fvisibility=hidden', '-std=gnu99'],
-                        use      = libs,
-                        subsystem = bld.env.MSVC_SUBSYSTEM)
-
-                bld.shlib(
-                        source   = source,
-                        target   = 'ref_gles2_gl4es',
-                        features = 'c',
-                        includes = includes,
-                        use      = libs + ['DL', 'gl4es', 'LOG'],
-                        defines  = ['XASH_GL4ES', 'XASH_GL_STATIC'],
-                        install_path = bld.env.LIBDIR,
-                        subsystem = bld.env.MSVC_SUBSYSTEM)

@@ -41,7 +41,7 @@ class Subproject:
                 if ctx.env.DEST_OS == 'android' and self.singlebin:
                         return False
 
-                if ctx.env.DEST_OS == 'wii' and 'ref' in self.name and 'gl' in self.name:
+                if ctx.env.DEST_OS == 'wii' and 'ref' in self.name and 'gx' in self.name:
                         return False
 
                 if ctx.env.DEDICATED and self.dedicated:
